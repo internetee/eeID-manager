@@ -7,7 +7,6 @@ default: &default
   email_from_address: "noreply@internet.ee"
 
   tos_link: https://www.internet.ee/domains/ee-domain-regulation
-  cas_management: https://tara-test.infra.tld.ee/cas-management
 
   mailer:
     host: 'https://eid.test'
