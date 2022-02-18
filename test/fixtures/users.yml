@@ -1,0 +1,67 @@
+administrator:
+    email: 'administrator@auction.test'
+    encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+    alpha_two_country_code: 'EE'
+    identity_code: '51007050118'
+    given_names: 'John Joe'
+    surname: 'Administrator'
+    confirmed_at: <%= Time.parse("2010-07-05 00:15:00 UTC") %>
+    created_at: <%= Time.parse("2010-07-05 00:15:00 UTC") %>
+    mobile_phone: '+37255000001'
+    roles: ['administrator']
+    balance_cents: '100'
+    billing_recipient: 'John Joe'
+    billing_vat_code: '0001'
+    billing_street: 'AliBaba'
+    billing_city: 'Manhattan'
+    billing_zip: '0001'
+    billing_alpha_two_country_code: 'EE'
+    terms_and_conditions_accepted_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    uuid: '6848ef9e-c3c7-406e-b300-6f8c7b7f41d9'
+    locale: 'en'
+
+customer:
+    email: 'user@auction.test'
+    encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+    alpha_two_country_code: 'EE'
+    identity_code: '51007050120'
+    given_names: 'Joe John'
+    surname: 'Participant'
+    confirmed_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    created_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    mobile_phone: '+37255000002'
+    roles: ['customer']
+    balance_cents: '1000'
+    billing_recipient: 'William Boy'
+    billing_vat_code: '0002'
+    billing_street: 'George Villiage'
+    billing_city: 'Brooklyn'
+    billing_zip: '0002'
+    billing_alpha_two_country_code: 'FI'
+    terms_and_conditions_accepted_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    uuid: 'dec265a9-4b4b-4165-83fd-9283700eae9c'
+    locale: 'en'
+
+signed_in_with_omniauth:
+    email: 'omniauth@auction.test'
+    encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+    alpha_two_country_code: 'EE'
+    identity_code: '51007050665'
+    given_names: 'TARA'
+    surname: 'USER'
+    confirmed_at: <%= Time.parse("2010-07-05 00:17:00 UTC") %>
+    created_at: <%= Time.parse("2010-07-05 00:17:00 UTC") %>
+    mobile_phone: '+37255000003'
+    roles: ['customer']
+    balance_cents: '10'
+    billing_recipient: 'Mr Smith'
+    billing_vat_code: '0004'
+    billing_street: 'Milckey Way'
+    billing_city: 'Queens'
+    billing_zip: '0005'
+    billing_alpha_two_country_code: 'EE'
+    terms_and_conditions_accepted_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    uuid: 'ea8de0ae-359c-4af3-8a6d-71edd08b9bd1'
+    locale: 'en'
+    uid: 'EE51007050665'
+    provider: 'tara'

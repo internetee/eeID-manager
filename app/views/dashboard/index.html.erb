@@ -1,0 +1,99 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1><%= t('.title') %></h1>
+</div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="ui container" style="width: auto; margin: 0 90px 40px 90px !important;">
+    <div class="ui two column stackable grid">
+        <div class="row">
+            <div class="column">
+                <h2>Recent Authentications</h2>
+                <table class="ui table unstackable" id="users-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <%= t('.timestamp') %>
+                            </th>
+                            <th scope="col">
+                                <%= t('.service') %>
+                            </th>
+                            <th scope="col">
+                                <%= t('.channel') %>
+                            </th>
+                            <th scope="col">
+                                <%= t('.identity') %>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="users-table-body">
+                        <% @authentications.each do |authentication| %>
+                        <tr class="users-table-row">
+                            <td><%= authentication.created_at.in_time_zone("EET").strftime('%d.%m.%Y %H:%M') %></td>
+                            <td class="user-table-user-name"><%= authentication.service&.name %></td>
+                            <td><%= authentication.channel %></td>
+                            <td><%= authentication.principal_code %></td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+                <% if @authentications.any? %>
+                        <div class="column">
+            <%= paginate @authentications, param_name: :authentications_page %>
+        </div>
+                <% else %>
+                <div class="ui center aligned placeholder segment">
+                    <div class="ui icon header">
+                        <i class="address card outline icon"></i>
+                        No authentications yet for your services.
+                    </div>
+                    <br>
+                    <a class="ui button" href="https://e-gov.github.io/TARA-Doku/TehnilineKirjeldus">View integration guide</a>
+                </div>
+                <% end %>
+            </div>
+            <div class="column">
+                <h2>Registered Services (<%= @services.count %>)</h2>
+                <table class="ui table unstackable" id="users-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <%= t('services.name') %>
+                            </th>
+                            <th scope="col">
+                                <%= t('services.service_url') %>
+                            </th>
+                            <th scope="col"><%= t('services.status') %></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="users-table-body">
+                        <% @services.each do |service| %>
+                        <tr class="users-table-row">
+                            <td class="user-table-user-name"><%= link_to service.name, service_path(service) %></td>
+                            <td><%= service.callback_url %></td>
+                            <td><%= status_pill(service.status) %></td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+                <% if @services.any? %>
+                <%= paginate @services, param_name: :services_page %>
+                <% else %>
+                <div class="ui center aligned placeholder segment">
+                    <div class="ui icon header">
+                        <i class="microchip icon"></i>
+                        No registered services yet.
+                    </div><br>
+                    <%= link_to t('.create_your_first_service'), new_service_path, class: "ui button primary" %>
+                </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>

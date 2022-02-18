@@ -1,0 +1,66 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.title') %></h1>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="ui container">
+    <div class="margin-block">
+        <table class="ui table unstackable fixed" id="users-table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <%= t('contacts.name') %>
+                    </th>
+                    <th scope="col" class="six wide">
+                        <%= t('contacts.email') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('contacts.phone') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('contacts.ident') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('contacts.default_user') %>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody id="users-table-body">
+            <% @contacts.each do |contact| %>
+                <tr class="users-table-row">
+                    <td class="user-table-user-name"><%= link_to contact.name, contact_path(contact) %></td>
+                    <td><%= contact.email %></td>
+                    <td><%= contact.mobile_phone %></td>
+                    <td><%= contact.identity_code %></td>
+                    <% if contact.default %>
+                        <td>
+                            <i class="check icon"></i>
+                        </td>
+                    <% else %>
+                        <td></td>
+                    <% end %>
+                </tr>
+            <% end %>
+            </tbody>
+        </table>
+        <% if @contacts.any? %>
+            <%= paginate @contacts %>
+            <br>
+            <p><%= link_to t('.create_new_contact'), new_contact_path, class: "ui button primary" %></p>
+        <% else %>
+            <div class="ui center aligned placeholder segment">
+                <div class="ui icon header">
+                    <i class="microchip icon"></i>
+                    No registered services yet.
+                </div><br>
+                <%= link_to t('.create_your_first_contact'), new_contact_path, class: "ui button primary" %>
+            </div>
+            <br>
+            <br>
+        <% end %>
+    </div>
+</div>

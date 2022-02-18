@@ -1,0 +1,31 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.title') %></h1>
+    </div>
+<% end %>
+
+<div class="u-container">
+    <div class="u-container margin-block">
+        <% if @user.errors.any? %>
+            <div class="ui message">
+                <div class="header">
+                    <%= t(:errors_name) %>
+                </div>
+                <ul id="errors">
+                    <% @user.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
+
+        <% if @user.signed_in_with_identity_document? %>
+            <%= render 'tara_form', user: @user, url: user_path(@user.uuid) %>
+        <% else %>
+            <%= render 'form', user: @user, url: user_path(@user.uuid) %>
+        <% end %>
+    </div>
+</div>
+
+<%= stylesheet_pack_tag 'stylesheets/users', media: 'all', 'data-turbolinks-track': 'reload' %>
+<%= javascript_pack_tag 'users', 'data-turbolinks-track': 'reload' %>

@@ -1,0 +1,48 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1><%= 'Payment History' %></h1>
+</div>
+<% end %>
+
+<br>
+
+<div class="u-container">
+
+    <table class="ui selectable stackable table" id="my-outstanding-invoices-table">
+        <thead>
+            <tr>
+                <th scope="col"><%= t('invoices.transaction_time') %></th>
+                <th scope="col"><%= t('invoices.customer') %></th>
+                <th scope="col"><%= t('invoices.description') %></th>
+                <th scope="col"><%= t('invoices.status') %></th>
+                <th scope="col"><%= t('invoices.amount') %></th>
+            </tr>
+        </thead>
+
+        <tbody class="invoices-table-body issued">
+            <% @invoices.each do |invoice| %>
+            <tr class="invoices-table-row">
+                <td><%= I18n.l(invoice.created_at) %></td>
+                <td><%= "#{ invoice.user.given_names } #{ invoice.user.surname }" %></td>
+                <td><%= link_to invoice.description, admin_invoice_path(invoice.uuid) %></td>
+                <td><%= invoice.status %></td>
+                <td><%= Money.new(invoice.total, 'EUR').to_s %>EUR</td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <% unless @invoices.any? %>
+    <div class="ui center aligned placeholder segment">
+  <div class="ui icon header">
+    <i class="money bill alternate icon"></i>
+    No invoices yet.
+</div>
+</div>
+<% else %>
+    <%= paginate @invoices %>
+    <% end %>
+</div>
+</div>
+<br>
+<br>
+<br>

@@ -1,0 +1,59 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.title') %></h1>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="ui container">
+    <div class="margin-block">
+        <table class="ui table unstackable fixed" id="users-table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <%= t('services.name') %>
+                    </th>
+                    <th scope="col" class="six wide">
+                        <%= t('services.service_url') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('services.status') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.contact') %>
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody id="users-table-body">
+                <% @services.each do |service| %>
+                    <tr class="users-table-row">
+                        <td class="user-table-user-name"><%= link_to service.name, service_path(service) %></td>
+                        <td><%= service.callback_url %></td>
+                        <td><%= status_pill(service.status) %></td>
+                        <td>
+                            <% if service.contact.present? %>
+                                <%= service.contact.name %></td>
+                            <% end %>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% if @services.any? %>
+            <%= paginate @services %>
+                    <br>
+        <p><%= link_to t('.create_new_service'), new_service_path, class: "ui button primary" %></p>
+        <% else %>
+                        <div class="ui center aligned placeholder segment">
+  <div class="ui icon header">
+    <i class="microchip icon"></i>
+    No registered services yet.
+  </div><br>
+  <%= link_to t('.create_your_first_service'), new_service_path, class: "ui button primary" %>
+</div>
+<br>
+<br>
+        <% end %>
+    </div>
+</div>

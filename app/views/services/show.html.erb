@@ -1,0 +1,83 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1>Service details</h1>
+
+        <div class="monospace"><%= @service.name %></div>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="margin-block">
+        <div class="body">
+            <table class="ui table very basic stackable padded">
+                <tbody>
+                    <tr>
+                        <td><strong><%= t('services.name') %></strong></td>
+                        <td class="monospace">
+                            <%= @service.name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('services.created_at') %></strong></td>
+                        <td><%= @service.created_at.strftime("%d-%m-%Y %H:%M") %>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('services.status') %></strong></td>
+                        <td><%= status_pill(@service.status) %></td>
+                    </tr>
+                    <% if @service.contact.present? %>
+                    <tr>
+                        <td><strong><%= t('.contact') %></strong></td>
+                        <td><%= @service.contact.name %></td>
+                    </tr>
+                    <% end %>
+                    <tr>
+                        <td><strong><%= t('.env') %></strong></td>
+                        <td><%= @service.environment %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('.auth') %></strong></td>
+                        <td><%= @service.auth_methods %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('.tech_email') %></strong></td>
+                        <td><%= @service.tech_email %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('.interrupt_email') %></strong></td>
+                        <td><%= @service.interrupt_email %></td>
+                    </tr>
+                    <% if @service.client_id.present? && !@service.suspended? %>
+                    <tr>
+                        <td><strong><%= t('services.client_id') %></strong></td>
+                        <td><%= @service.regex_service_name %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('services.client_secret') %></strong></td>
+                        <td><%= @service.password %></td>
+                    </tr>
+                    <% end %>
+                    <tr>
+                        <td><strong><%= t('services.url') %></strong></td>
+                        <td><%= @service.callback_url %></td>
+                    </tr>
+                </tbody>
+            </table>
+                    <div class="ui message margin-block">
+                        <div class="header">
+                            Approval phase details
+                        </div>
+                        <ul class="list">
+                            <%= @service.approval_description %>
+                        </ul>
+                    </div>
+                        <div class="buttons">
+                    <%= link_to 'Edit service details',
+                    edit_service_path(@service), class: "ui button primary" %>
+                    <%= link_to "Delete", service_path(@service), method: :delete, class: "ui button secondary" , data: { confirm: 'Are you certain you want to delete this?' } %>
+            </div>
+        </div>
+    </div>
+</div>

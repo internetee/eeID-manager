@@ -1,0 +1,115 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1>Your account</h1>
+</div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="margin-block">
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="content">
+                    <h2>Personal information</h2>
+                    <div class="body">
+                        <table class="ui table very basic padded">
+                            <tbody>
+                                <tr>
+                                    <td><strong><%= t('users.name') %></strong></td>
+                                    <td><%= (@user.display_name) %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><%= t('users.email') %></strong></td>
+                                    <td><%= (@user.email) %></td>
+                                </tr>
+
+                                <% if @user.mobile_phone.present? %>
+                                <tr>
+                                    <td><strong><%= t('users.mobile_phone') %></strong></td>
+                                    <td>
+                                        <%= (@user.mobile_phone) %>
+                                    </td>
+                                </tr>
+                                <% end %>
+
+                                <tr>
+                                    <td><strong><%= t('users.country_code') %></strong></td>
+                                    <td>
+                                        <i class="flag <%= @user.country_code.downcase %>"></i>
+                                        <%= (@user.country_code) %>
+                                    </td>
+                                </tr>
+
+                                <% if @user.identity_code.present? %>
+                                <tr>
+                                    <td><strong><%= t('users.identity_code') %></strong></td>
+                                    <td><%= (@user.identity_code) %></td>
+                                </tr>
+                                <% end %>
+
+                                <tr>
+                                    <td><strong><%= t('created_at') %></strong></td>
+                                    <td><%= I18n.l(@user.created_at) %></td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong><%= t('users.terms_and_conditions') %></strong></td>
+                                    <td><%= link_to t('.review_terms_and_conditions'), Setting.fetch(:tos_link), target: :_blank %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="content">
+                    <h2>Billing information</h2>
+                    <div class="body">
+                        <table class="ui table very basic padded">
+                            <tbody>
+                                <tr>
+                                    <td><strong><%= t('users.recipient') %></strong></td>
+                                    <td><%= (@user.billing_recipient) %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><%= t('users.vat_code') %></strong></td>
+                                    <td><%= @user.billing_vat_code %></td>
+                                </tr>
+                                <tr>
+                                    <td><strong><%= t('users.country_code') %></strong></td>
+                                    <td>
+                                        <i class="flag <%= @user.billing_alpha_two_country_code&.downcase %>"></i>
+                                        <%= (@user.billing_alpha_two_country_code) %>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong><%= t('users.street') %></strong></td>
+                                    <td><%= @user.billing_street %></td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong><%= t('users.city') %></strong></td>
+                                    <td><%= @user.billing_city %></td>
+                                </tr>
+
+                                <tr>
+                                    <td><strong><%= t('users.postal_code') %></strong></td>
+                                    <td><%=  @user.billing_zip %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="body">
+                <div class="buttons">
+                    <%= link_to t(:edit_details), edit_user_path(@user.uuid), class: "ui button primary" %>
+                    <%= link_to t('.delete'), user_path(@user.uuid),
+                    method: :delete, data: { confirm: t(:are_you_sure) },
+                    remote: true, class: "ui button secondary" %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

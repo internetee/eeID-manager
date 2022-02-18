@@ -1,0 +1,34 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= "Edit #{@service.name} service" %></h1>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+<div class="u-container">
+<div class="ui message margin-block">
+  <div class="header">
+    Just a quick reminder
+  </div>
+  <ul class="list">
+    <li>When changing service's callback URL, your service is going back to review phase, which means it's no longer active</li>
+    <li>Review phase could take up to 2 working days.</li>
+  </ul>
+</div>
+    <div class="u-container margin-block">
+        <% if @service.errors.any? %>
+            <div class="ui message">
+                <div class="header">
+                    <%= t(:errors_name) %>
+                </div>
+                <ul id="errors">
+                    <% @service.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
+
+        <%= render 'form', service: @service, url: service_path(@service) %>
+    </div>
+</div>

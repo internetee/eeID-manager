@@ -1,0 +1,103 @@
+en:
+  users:
+    display_name: "Display name"
+    given_names: "Given names"
+    surname: "Surname"
+    country: "Country"
+    email: "Email"
+    mobile_phone: "Mobile phone"
+    role: "Role"
+    roles: "Roles"
+    country_code: "Country code"
+    identity_code: "Identity code"
+    terms_and_conditions: "Terms and conditions"
+    must_accept_terms_and_conditions: "Terms and conditions must be accepted"
+    terms_and_conditions_accepted_at: "Terms and conditions accepted at"
+    password: "Password"
+    password_confirmation: "Password confirmation"
+    current_password: "Current password"
+    remember_me: "Remember me"
+    i_accept_terms_and_conditions_html: "I have read and agree with %{link}."
+    terms_and_conditions_link: "eID Portal user agreement"
+    email_changed: >-
+      Confirmation link was sent to new email address. Please confirm the address for the change to
+      take an effect!
+    invalid_user_data: "We have detected some invalid characters in your user account data or billing profile. Please review and fix your profile data!"
+    edit:
+      title: "Edit your user profile"
+      contact_data: "Contact data"
+      new_password: "New password"
+      we_need_your_password: "(we need your current password to confirm your changes)"
+      you_can_leave_blank: "(leave blank if you don't want to change it)"
+      confirm_your_changes: "Confirm your changes"
+      errors: "prohibited this user from being saved"
+    index:
+      welcome_back: "Welcome back, %{display_name}"
+      create_an_account: "Create an account"
+    new:
+      title: "Create a user account"
+      already_signed_in: "You are already signed in"
+      errors: "prohibited this user from being saved"
+    form:
+      password_requirements: "at least %{minimum} characters"
+      sign_up: "Sign up"
+      contact_data: "Contact data"
+      personal_data: "Personal data"
+      new_password: "New password"
+      you_can_leave_blank: "leave blank if you don't want to change it"
+      we_need_your_password: "we need your current password to confirm your changes)"
+      currently_pending_confirmation: "Currently pending confirmation for %{email}."
+      daily_summary: "Daily summary"
+      account_data: "Account data"
+      billing_data: "Billing data"
+    tara_form:
+      password_requirements: "at least %{minimum} characters"
+      sign_up: "Sign up"
+      contact_data: "Contact data"
+      personal_data: "Personal data"
+      new_password: "New password"
+      you_can_leave_blank: "leave blank if you don't want to change it"
+      we_need_your_password: "we need your current password to confirm your changes)"
+      data_from_identity_document: "Data from identity document"
+      daily_summary: "Daily summary"
+    update:
+      incorrect_password: "Incorrect current password"
+
+    show:
+      title: "User profile"
+      delete: "Delete account"
+      review_terms_and_conditions: "Review terms and conditions"
+      daily_summary: "Daily summary to email"
+
+    destroy:
+      deleted: "You have been logged out and your account has been deleted."
+      cannot_delete: "Your account cannot be deleted because you got unpaid invoices."
+    toggle_subscription:
+      subscription_status_toggled_flash: "Subscription status changed."
+
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            terms_and_conditions:
+              format: "%{message}"
+            mobile_phone:
+              format: "%{message}"
+            given_names:
+              format: "%{attribute}: %{message}"
+            surname:
+              format: "%{attribute}: %{message}"
+
+    attributes:
+      user:
+        display_name: "Display name"
+        given_names: "Given names"
+        surname: "Surname"
+        country: "Country"
+        email: "Email"
+        mobile_phone: "Mobile phone"
+        terms_and_conditions: "Terms and conditions"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+        identity_code: "Identity code"

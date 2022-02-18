@@ -1,0 +1,36 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("APP_DB_MAX_THREADS") { 5 } %>
+  host: <%= ENV.fetch("APP_DBHOST") { "localhost" } %>
+  username: <%= ENV.fetch("APP_DBUSER") { "postgres" } %>
+
+development_tara:
+  adapter: postgresql
+  encoding: unicode
+  database: tara-database-name
+  host: host-to-tara-database
+  username: tara
+  password: tara
+development:
+  <<: *default
+  database: eid_manager_development
+test_tara:
+  <<: *default
+  database: eid_manager_test
+  password: password
+test:
+  <<: *default
+  database: eid_manager_test
+  password: password
+staging:
+  <<: *default
+  database: eid_manager_staging
+  password: <%= ENV['EID_MANAGER_DATABASE_PASSWORD'] %>
+production:
+  <<: *default
+  database: eid_manager_production
+  username: eid_manager
+  password: <%= ENV['EID_MANAGER_DATABASE_PASSWORD'] %>

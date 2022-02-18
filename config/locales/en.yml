@@ -1,0 +1,138 @@
+en:
+  admin:
+    authentications:
+      index:
+        timestamp: 'Date'
+        customer: "Service owner"
+        identifier: "Identifier"
+        service: "Service"
+        identity: "Identity"
+        first_name: "First name"
+        last_name: "Last name"
+  new: "New"
+  back: "Back"
+  update: "Update"
+  edit: "Edit"
+  submit: "Submit"
+  delete: "Delete"
+
+  in_local_language: "English"
+
+  created: "Created successfully."
+  updated: "Updated successfully."
+  deleted: "Deleted successfully."
+  something_went_wrong: "Something went wrong."
+  are_you_sure: "Are you sure?"
+  confirm: "Confirm"
+
+  billing: "Billing"
+
+  profile: "Profile"
+  sign_in: "Sign in"
+  sign_in_cancelled: "Sign in cancelled"
+  sign_out: "Sign out"
+  forgot_your_password: "Forgot your password?"
+  change_your_password: "Change your password"
+
+  "yes": "Yes"
+  "no": "No"
+
+  auctions_name: "Auctions"
+  settings_name: "Settings"
+  users_name: "Users"
+  results_name: "Results"
+  result_name: "Result"
+  versions_name: "Versions"
+  offers_name: "Offers"
+  invoices_name: "Invoices"
+  jobs_name: "Jobs"
+  bans_name: "Bans"
+  errors_name: "Errors"
+  statistics_name: "Statistics"
+
+  user: "User"
+  deleted_user: "User was deleted"
+  banned: |
+    You are banned from participating in auctions for domain(s): %{domain_names}.
+  banned_completely: |
+    You are banned from participating in .ee domain auctions due to multiple overdue
+    invoices until %{valid_until}.
+  violation_message_html: >-
+    Number of current <a href="%{violations_count_regulations_link}">violations</a>:
+    %{violations_count} of %{ban_number_of_strikes}
+
+  my_offers: "My offers"
+  my_invoices: "My invoices"
+  my_wishlist: "My wishlist"
+  actions: "Actions"
+  job_enqueued: "Job enqueued. Check in a few minutes for results."
+  status: "Status"
+
+  users:
+    display_name: "Display name"
+    email: "Email"
+    mobile_phone: "Mobile phone"
+    role: "Role"
+    roles: "Roles"
+    country_code: "Country code"
+    identity_code: "Identity code"
+    can_be_left_blank_if_not_estonian: "Can be left blank if you are not Estonian"
+
+  versions:
+    action: "Action"
+    recorded_at: "Recorded at"
+    new_values: "New values"
+
+  created_at: "Created at"
+  updated_at: "Updated at"
+
+  is_invalid: "is invalid"
+  invalid: "invalid"
+  value_is_not_safe: |
+    Please, note, what the only characters allowed is utf-characters of english/estonian alphabet,
+    numbers, forward slashes, apostrophes, dots and hyphens
+  not_accepted: "Not accepted"
+  details: "Details"
+  updated_by: "Updated by"
+  already_confirmed: |
+    Phone number you've entered is already in use by somebody else.
+    Please, use another phone number
+
+  search: "Search"
+  search_by_domain_name: "Search by domain name"
+  search_by_email: "Search by email"
+  search_limit: "Search results are limited to first %{limit} hits."
+
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M"
+      long: "%A, %e. %B %Y, %H:%M"
+      short: "%d.%m.%y, %H:%M"
+      date: "%Y-%m-%d"
+      date_long: "%d. %B %Y"
+      filename: "%Y-%m-%d_%H.%M"
+
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+      truncate: "&hellip;"
+  helpers:
+    page_entries_info:
+      entry:
+        zero: "entries"
+        one: "entry"
+        other: "entries"
+      one_page:
+        display_entries:
+          zero: "No %{entry_name} found"
+          one: "Displaying <b>1</b> %{entry_name}"
+          other: "Displaying <b>all %{count}</b> %{entry_name}"
+      more_pages:
+        display_entries: "Displaying %{entry_name} <b>%{first}&nbsp;-&nbsp;%{last}</b> of <b>%{total}</b> in total"
+    submit:
+      user:
+        update: "Change my password"
+        create: "Change my password"

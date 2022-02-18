@@ -1,0 +1,8 @@
+en:
+  billing_mailer:
+    account_credited:
+      subject: "Your eID account has been credited!"
+    out_of_balance:
+      subject: "Your eiD service(s) have been suspended"
+    balance_critical_level:
+      subject: "Your eID account balance is running cricitally low"

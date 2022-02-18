@@ -1,0 +1,26 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.create_new_contact') %></h1>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="u-container margin-block">
+        <% if @contact.errors.any? %>
+            <div class="ui message">
+                <div class="header">
+                    <%= t(:errors_name) %>
+                </div>
+                <ul id="errors">
+                    <% @contact.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
+
+        <%= render 'form', contact: @contact, url: contacts_path %>
+    </div>
+</div>

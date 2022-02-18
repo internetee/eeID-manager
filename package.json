@@ -1,0 +1,66 @@
+{
+  "name": "eid_manager",
+  "private": true,
+  "scripts": {
+    "test": "NODE_ENV=test karma start"
+  },
+  "dependencies": {
+    "@rails/webpacker": "^6.0.0-rc.5",
+    "@webpack-cli/serve": "^1.6.0",
+    "babel-plugin-macros": "^3.1.0",
+    "chartkick": "^4.1.0",
+    "css-loader": "^5.2.7",
+    "file-loader": "^6.2.0",
+    "highcharts": "^9.3.0",
+    "jquery": "^3.6.0",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "libphonenumber-js": "^1.9.38",
+    "mini-css-extract-plugin": "^2.4.3",
+    "postcss": "^8.3.11",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^14.0.2",
+    "postcss-loader": "^6.2.0",
+    "postcss-preset-env": "^7.0.0",
+    "punycode": "^2.1.1",
+    "rails-ujs": "^5.2.6",
+    "resolve-url-loader": "^4.0.0",
+    "sass": "^1.43.3",
+    "sass-loader": "^12.3.0",
+    "style-loader": "^3.3.1",
+    "turbolinks": "^5.2.0",
+    "typeface-raleway": "^1.1.13",
+    "url-loader": "^4.1.1"
+  },
+  "babel": {
+    "presets": [
+      "./node_modules/@rails/webpacker/package/babel/preset.js"
+    ]
+  },
+  "version": "0.0.1",
+  "description": "Billing solution for EIS TARA",
+  "main": "index.js",
+  "repository": "git@github.com:internetee/eid_manager",
+  "license": "MIT/X11",
+  "contributors": [
+    "Karl Erik Õunapuu <karlerik@kreative.ee>",
+    "Dinar Safiulin <dinar.safiulin@eestiinternet.ee>"
+  ],
+  "babel": {
+    "presets": [
+      "./node_modules/@rails/webpacker/package/babel/preset.js"
+    ]
+  },
+  "devDependencies": {
+    "karma": "^6.3.4",
+    "karma-chrome-launcher": "^3.0.0",
+    "karma-coverage": "^2.0.3",
+    "karma-jquery": "^0.2.3",
+    "karma-qunit": "^4.1.2",
+    "karma-webpack": "^5.0.0",
+    "qunit": "^2.17.2",
+    "webpack": "^5.60.0",
+    "webpack-cli": "^4.8.0",
+    "webpack-dev-server": "^4.3.1"
+  }
+}

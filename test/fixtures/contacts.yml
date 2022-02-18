@@ -1,0 +1,14 @@
+john:
+  name: 'John'
+  email: 'john@mail.comee'
+  mobile_phone: '+372.11223344'
+  identity_code: '12345678'
+  user: customer
+  main: true
+
+two:
+  name: 'Test contact'
+  email: 'test@mail.comee'
+  mobile_phone: '+372.11223355'
+  identity_code: '12345600'
+  user: customer

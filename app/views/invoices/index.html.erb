@@ -1,0 +1,127 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1><%= 'Billing' %></h1>
+</div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="ui two column grid">
+        <div class="column">
+            <h2>Top up via credit card / bank link</h2>
+            <%= form_with(url: new_top_up_invoice_path, local: true, method: :post) do |f| %>
+            <div class="ui right labeled right action input">
+                <label for="amount" style="background-color: #A7A8AA; color: white" class="ui blue label">EUR</label>
+                <%= f.number_field :amount, value: '10.00' %>
+                <%= button_tag(type: "submit", class: 'ui blue labeled icon button') do %>
+                <i class="cart icon"></i> Top up now
+                <% end %>
+            </div>
+            <% end %>
+        </div>
+        <div class="center aligned ui column">
+            <h2>Top up via SEPA transfer</h2>
+            <div class="ui divided relaxed horizontal list">
+                <div class="item">
+                    <div class="content">
+                        Beneficiary
+                        <div class="header">There should be beneficiary data</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        Payment description
+                        <div class="header"><%= current_user.uuid %></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui hidden divider"></div>
+
+            <div class="ui divided relaxed horizontal list">
+                <div class="item">
+                    <div class="content">
+                        Bank
+                        <div class="header">There should be bank account and BIC</div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        IBAN
+                        <div class="header">There should be IBAN</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2>Payment history</h2>
+
+    <table class="ui selectable stackable table" id="my-outstanding-invoices-table">
+        <thead>
+            <tr>
+                <th scope="col"><%= t('invoices.transaction_time') %></th>
+                <th scope="col"><%= t('invoices.description') %></th>
+                <th scope="col"><%= t('invoices.status') %></th>
+                <th scope="col"><%= t('invoices.amount') %></th>
+            </tr>
+        </thead>
+
+        <tbody class="invoices-table-body issued">
+            <% @invoices.each do |invoice| %>
+            <tr class="invoices-table-row">
+                <td><%= I18n.l(invoice.created_at) %></td>
+                <td><%= link_to invoice.description, invoice_path(invoice.uuid) %></td>
+                <td><%= invoice.status %></td>
+                <td><%= Money.new(invoice.total, 'EUR').to_s %>EUR</td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <% if @invoices.any? %>
+    <%= paginate @invoices, param_name: :invoices_page %>
+    <% else %>
+    <div class="ui center aligned placeholder segment">
+        <div class="ui icon header">
+            <i class="money bill alternate icon"></i>
+            No top up payments yet
+        </div>
+    </div>
+    <% end %>
+    <h2>Spending history</h2>
+
+    <table class="ui selectable stackable table" id="my-outstanding-invoices-table">
+        <thead>
+            <tr>
+                <th scope="col"><%= t('invoices.transaction_time') %></th>
+                <th scope="col"><%= t('invoices.service') %></th>
+                <th scope="col"><%= t('invoices.description') %></th>
+                <th scope="col"><%= t('invoices.amount') %></th>
+            </tr>
+        </thead>
+
+        <tbody class="invoices-table-body issued">
+            <% @transactions.each do |transaction| %>
+            <tr class="invoices-table-row">
+                <td><%= I18n.l(transaction.authentication.created_at) %></td>
+                <td><%= transaction.authentication.service.name %></td>
+                <td> Authorization (<%= transaction.authentication.session_id %>) via <%= transaction.authentication.channel %></td>
+                <td><%= Money.new(transaction.cents, 'EUR').to_s %>EUR</td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+    <% if @transactions.any? %>
+    <%= paginate @transactions, param_name: :transactions_page %>
+    <div class="ui hidden divider"></div>
+    <% else %>
+    <div class="ui center aligned placeholder segment">
+        <div class="ui icon header">
+            <i class="money bill alternate outline icon"></i>
+            No billable transactions yet
+        </div>
+    </div>
+    <% end %>
+</div>
+</div>
+<br>
+<br>

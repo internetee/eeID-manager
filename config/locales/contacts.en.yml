@@ -1,0 +1,27 @@
+en:
+  contacts:
+    name: "Name"
+    email: "Email"
+    phone: "Mobile phone"
+    ident: "Identity code"
+    title: "Your Contacts"
+
+    new:
+      create_new_contact: "Create new contact"
+      name: "Name"
+      email: "Email"
+      phone: "Mobile phone"
+      ident: "Identity code"
+
+    index:
+      title: "Your Contacts"
+      search: "Search by domain name"
+      auction_list_tooltip: "Send me daily auctioned domain list by email"
+      auction_list_unsubscribe_tooltip: "Unsubscribe me from daily auctioned domain lists"
+      create_new_contact: "Create new contact"
+
+    show:
+      title: "Auction details"
+
+
+

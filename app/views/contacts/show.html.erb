@@ -1,0 +1,49 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1>Contact details</h1>
+
+        <div class="monospace"><%= @contact.name %></div>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="margin-block">
+        <div class="body">
+            <table class="ui table very basic stackable padded">
+                <tbody>
+                    <tr>
+                        <td><strong><%= t('contacts.name') %></strong></td>
+                        <td class="monospace">
+                            <%= @contact.name %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('contacts.created_at') %></strong></td>
+                        <td><%= @contact.created_at %>
+                    </tr>
+
+
+                    <tr>
+                        <td><strong><%= t('contacts.ident') %></strong></td>
+                        <td><%= @contact.identity_code %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('contacts.email') %></strong></td>
+                        <td><%= @contact.email %></td>
+                    </tr>
+                    <tr>
+                        <td><strong><%= t('contacts.phone') %></strong></td>
+                        <td><%= @contact.mobile_phone %></td>
+                    </tr>
+                </tbody>
+            </table>
+
+                        <div class="buttons">
+                    <%= link_to 'Edit contact details', edit_contact_path(@contact), class: "ui button primary" %>
+                    <%= link_to "Delete", contact_path(@contact), method: :delete, class: "ui button secondary" , data: { confirm: 'Are you certain you want to delete this?' } %>
+            </div>
+        </div>
+    </div>
+</div>

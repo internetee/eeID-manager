@@ -1,0 +1,60 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1><%= 'Authentications' %></h1>
+</div>
+<% end %>
+
+<div class="ui container">
+    <div class="margin-block">
+        <table class="ui table unstackable fixed" id="users-table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <%= t('.timestamp') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.customer') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.identifier') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.service') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.identity') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('.first_name') %>
+                    </th>
+                    <th scope="col"><%= t('.last_name') %></th>
+                </tr>
+            </thead>
+
+            <tbody id="users-table-body">
+                <% @authentications.each do |authentication| %>
+                <tr class="users-table-row">
+                    <td><%= authentication.created_at.in_time_zone("EET").strftime('%d.%m.%Y %H:%M') %></td>
+                    <td><%= "#{authentication.service&.user&.given_names} #{authentication.service&.user&.surname}" %></td>
+                    <td class="user-table-user-name"><%= authentication.session_id %></td>
+                    <td class="user-table-user-name"><%= authentication.service.name %></td>
+                    <td><%= authentication.principal_code %></td>
+                    <td><%= authentication.first_name %></td>
+                    <td><%= authentication.last_name %></td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% unless @authentications.any? %>
+        <div class="ui center aligned placeholder segment">
+            <div class="ui icon header">
+                <i class="address card outline icon"></i>
+                No authentications yet.
+            </div>
+        </div>
+        <% else %>
+        <%= paginate @authentications %>
+        <% end %>
+        <br><br>
+    </div>
+</div>

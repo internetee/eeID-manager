@@ -1,0 +1,30 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.please_wait') %></h1>
+    </div>
+<% end %>
+
+<div class="u-container">
+    <div class="margin-block">
+        <div class="ui one column doubling stackable grid">
+            <div class="column">
+                <div class="margin-block narrow">
+                    <div class="ui active inverted dimmer">
+                        <div class="ui loader text"><%= t('.you_are_being_redirected') %></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="hidden form">
+                    <%= form_with(url: @payment_order.form_url, method: :get, local: true, id: 'payment-order-form') do |f| %>
+                        <%= f.submit t(:submit) %>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%= stylesheet_pack_tag 'stylesheets/payment_orders', media: 'all', 'data-turbolinks-track': 'reload' %>
+<%= javascript_pack_tag 'payment_orders', 'data-turbolinks-track': 'reload' %>

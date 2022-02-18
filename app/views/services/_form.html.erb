@@ -1,0 +1,62 @@
+<%= form_with(model: service, url: url, local: true, class: "ui form big") do |f| %>
+<div class="ui grid">
+    <div class="column">
+        <% unless service.persisted? %>
+        <div class="field">
+                <%= f.label :intro1, t('services.intro1') %>
+                <%= f.label :cookies do
+                  "2. We confirm that we use the service for the intended purpose and that we have read and agree to it
+                    #{link_to('Terms of service.', 'https://meedia.internet.ee/files/EIS-i%20eeID%20teenuse%20kasutamistingimused.pdf')}".html_safe
+                end %>
+                <%= f.label :intro2, t('services.intro2') %>
+        </div>
+        <% end %>
+        <div class="field">
+            <%= f.label :name, t('services.name') %>
+            <%= f.text_field :name, required: true, class: "form-control" %>
+        </div>
+        <div class="field">
+            <%= f.label :short_description, 'Service description' %>
+            <%= f.text_field :short_description, required: true, class: "form-control", placeholder: 'Keep it simple. One sentence is enough' %>
+        </div>
+        <div class="field">
+            <%= f.label :approval_description, 'Approval description' %>
+            <%= f.text_area :approval_description, required: true, rows: 3, class: "ui-comment form-control", placeholder: 'What are you building? Who are your customers?' %>
+        </div>
+        <div class="field">
+            <%= f.hidden_field :user_id, value: service.user_id %>
+        </div>
+        <div class="field">
+            <%= f.label :callback_url, 'Where should we forward user after authentication?' %>
+            <%= f.text_field :callback_url, required: true, class: "form-control", placeholder: 'https://domain.com/eid/callback' %>
+        </div>
+        <div class="field">
+            <%= f.label 'service[environment]', 'Environment' %>
+            <%= select_tag 'service[environment]', options_for_select([['Test'], ['Production']], environment(service)), {multiple: false, required: true, class: 'ui compact selection dropdown'} %>
+        </div>
+        <div class="field">
+            <%= f.label 'service[auth_methods]', 'Authentication methods' %>
+            <%= select_tag 'service[auth_methods]', options_for_select([['id-card','idcard'], ['mobile-id','mid'], ['smart-id','smartid']], auth_methods(service)), {multiple: true, required: false, autofocus: true, class: 'ui compact selection dropdown'} %>
+        </div>
+        <div class="field">
+            <%= f.label :contact_id do "Choose from contacts or #{link_to('create new', new_contact_path)}".html_safe end %>
+            <%= f.select :contact_id, options_for_select(current_user.contacts.all.map { |x| [x.name, x.id] }, default_contact(service.contact, current_user)), {multiple: false, class: 'ui compact selection dropdown'} %>
+        </div>
+
+        <div class="field">
+            <%= f.label :tech_email, 'Email address for technical announcements' %>
+            <%= f.text_field :tech_email, required: false, class: "form-control", placeholder: 'tech@example.com'%>
+        </div>
+        <div class="field">
+            <%= f.label :interrupt_email, 'Email address for service interruptions' %>
+            <%= f.text_field :interrupt_email, required: false, class: "form-control", placeholder: 'interrupt@example.com' %>
+        </div>
+
+
+        <div class="column wide sixteen">
+            <%= link_to t(:back), :back, class: "ui button secondary" %>
+            <%= f.submit 'Submit for approval', class: "ui button primary" %>
+        </div>
+    </div>
+</div>
+<% end %>

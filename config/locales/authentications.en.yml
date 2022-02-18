@@ -1,0 +1,89 @@
+en:
+  authentications:
+    service: "Service"
+    identity: "Identity"
+    channel: "Channel"
+    status: "Status"
+    price: "price"
+
+    index:
+      title: "eID Authentications"
+      search: "Search by domain name"
+      auction_list_tooltip: "Send me daily auctioned domain list by email"
+      auction_list_unsubscribe_tooltip: "Unsubscribe me from daily auctioned domain lists"
+      timestamp: 'Date'
+      identifier: "Identifier"
+      service: "Service"
+      identity: "Identity"
+      first_name: "First name"
+      last_name: "Last name"
+
+    search:
+      title: "Auction search"
+      search: "Search by domain name"
+      limit: "Search results are limited to first %{limit} hits."
+      auction_list_tooltip: "Send me daily auctioned domain list by email"
+      auction_list_unsubscribe_tooltip: "Unsubscribe me from daily auctioned domain lists"
+
+    show:
+      title: "Auction details"
+
+    top_grid:
+      title: "Domains in auction:"
+      1_step_header: "Submit an offer"
+      1_step_explanation: |
+        you can change or remove offers at any time during the auction.
+        Offers are confidential.
+
+      2_step_header: "Wait for auction to end"
+      2_step_explanation: |
+        We will let you know about the result by email.
+        Hopefully your offer was the highest and you will get
+        the reservation to register the domain name.
+
+      3_step_header: "Pay auction fee"
+      3_step_explanation: |
+        Once the fee is paid, you will receive a registration code that you
+        can use at any accredited registrar.
+
+      please_note: |
+        NB. Please note that you will receive priority right to register the domain!
+        Upon registration, you will also be charged a domain registration fee based on
+        your chosen registrar's price list.
+
+      footer_html: "Please check out the %{terms_and_conditions_link} of .ee %{faq_link}."
+      terms_and_conditions_link: "terms and conditions"
+      faq_link: "auctioning process"
+
+    bottom_grid:
+      title: "Auction rules"
+      1_step_header: "Blind auction"
+      1_step_explanation: |
+        The bids are for domain name reservation. The winner will have to pay additional
+        registration fee to the registrar according to their pricelist.
+        Offers are confidential, participants do not see how many offers have been
+        made and with what price.
+
+      2_step_header: "Winning an auction"
+      2_step_explanation: |
+        Once you have won an auction, you should pay the invoice within 7 calendar days.
+        After that, you have 14 days to register the domains with a registrar of your choice.
+
+      3_step_header: "Changing an offer"
+      3_step_explanation: |
+        During the auction, you can adjust your offer at any point.
+
+      4_step_header: "Withdrawing an offer"
+      4_step_explanation: |
+        If you no longer want to participate in an auction, you can withdraw your offer
+        at any point, as long as the auction is still in progress. Once the action has ended,
+        you cannot withdraw your offer.
+
+    banned: |
+      You are banned from participating in auctions for domain(s): %{domain_names}.
+    banned_completely: |
+      You are banned from participating in .ee domain auctions due to multiple overdue
+      invoices until %{valid_until}.
+    violation_message_html: >-
+      Number of current <a href="%{violations_count_regulations_link}">violations</a>:
+      %{violations_count} of %{ban_number_of_strikes}

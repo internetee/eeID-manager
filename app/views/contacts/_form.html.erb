@@ -1,0 +1,32 @@
+<%= form_with(model: contact, url: url, local: true, class: "ui form big") do |f| %>
+<div class="ui grid">
+    <div class="column">
+        <div class="field">
+            <%= f.label :name, 'Contact name' %>
+            <%= f.text_field :name, required: true, class: "form-control", placeholder: 'Enter contact name' %>
+        </div>
+        <div class="field">
+            <%= f.label :email, 'Contact email' %>
+            <%= f.text_field :email, required: true, class: "form-control", placeholder: 'Enter contact email' %>
+        </div>
+        <div class="field">
+            <%= f.label :mobile_phone, 'Contact phone' %>
+            <%= f.text_field :mobile_phone, required: true, class: "form-control", placeholder: 'Enter contact phone' %>
+        </div>
+        <div class="field">
+            <%= f.label :identity_code, 'Contact identity code' %>
+            <%= f.text_field :identity_code, required: true, class: "form-control", placeholder: 'Enter contact identity code' %>
+        </div>
+        <div class="ui checkbox">
+            <%= f.check_box :default %>
+            <%= f.label :default, "Use the contact as a default for new services" %>
+        </div>
+        <div class="ui divider"></div>
+
+        <div class="column wide sixteen">
+            <%= link_to t(:back), :back, class: "ui button secondary" %>
+            <%= f.submit 'Submit', class: "ui button primary" %>
+        </div>
+    </div>
+</div>
+<% end %>

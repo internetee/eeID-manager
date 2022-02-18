@@ -1,0 +1,109 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= @invoice.title %></h1>
+    </div>
+<% end %>
+
+<div class="u-container">
+    <div class="margin-block">
+        <div class="ui two column doubling stackable grid">
+            <div class="column left aligned">
+            <div class="ui divided relaxed horizontal list">
+
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.payee') %>
+                        <div class="header"><%= @invoice.recipient %></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.payee_address') %>
+                        <div class="header"><%= @invoice.address %></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="column center aligned">
+            <div class="ui divided relaxed horizontal list">
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.issuer') %>
+                        <div class="header"><%= Setting.fetch(:billing, :issuer) %></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.issue_date') %>
+                        <div class="header"><%= @invoice.issue_date %></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.due_date') %>
+                        <div class="header"><%= @invoice.due_date %></div>
+                    </div>
+                </div>
+                    <% if @invoice.paid? %>
+                <div class="item">
+                    <div class="content">
+                        <%= t('invoices.paid_at') %>
+                        <div class="header"><%= @invoice.paid_at %></div>
+                    </div>
+                </div>
+                    <% end %>
+            </div>
+            </div>
+
+            <div class="column sixteen wide">
+                <h2><%= t('invoices.items') %></h2>
+                <table class="ui table" id="invoice-items-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col"><%= t('invoices.item') %></th>
+                            <th scope="col"><%= t('invoices.price') %></th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="invoice-items-table-body">
+                            <tr>
+                                <td>1</td>
+                                <td><%= @invoice.description %></td>
+                                <td><%= @invoice.price %></td>
+                            </tr>
+                    </tbody>
+
+                    <tfoot>
+                        <tr>
+                            <td scope="col"></td>
+                            <td scope="col"><%= t('invoices.vat_exclusive', price: @invoice.price) %></td>
+                            <td scope="col"><%= t('invoices.price_in_currency', price: @invoice.price) %></td>
+                        </tr>
+
+                        <tr>
+                            <td scope="col"></td>
+                            <td scope="col"><%= t('invoices.vat_rate', price: @invoice.price) %></td>
+                            <td scope="col">
+                                <%= number_to_percentage(@invoice.vat_rate * 100, precision: 0) %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td scope="col"></td>
+                            <td scope="col"><%= t('invoices.vat_amount') %></td>
+                            <td scope="col"><%= t('invoices.price_in_currency', price: @invoice.vat) %></td>
+                        </tr>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col"><%= t('invoices.total') %></th>
+                            <th scope="col"><%= t('invoices.price_in_currency', price: @invoice.total) %></th>
+                        </tr>
+                    </tfoot>
+                </table>
+                                <%= link_to t('invoices.download_invoice'), download_admin_invoice_path(@invoice.uuid),
+                            { class: 'ui button secondary', download: true } %>
+            </div>
+        </div>
+    </div>
+</div>

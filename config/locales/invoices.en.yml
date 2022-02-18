@@ -1,0 +1,56 @@
+en:
+  invoices:
+    payee: "Payee"
+    payee_address: "Payee address"
+    download_invoice: "Download invoice"
+    price_in_currency: "%{price} €"
+    is_being_generated: "We are generating the invoice, please check back in a few minutes."
+    transaction_time: "Transaction time"
+    description: "Description"
+    amount: "Amount"
+    service: "Service"
+    issue_date: "Issue date"
+    issuer: "Issuer"
+    issued_for: "Issued for"
+    due_date: "Due date"
+    status: "Status"
+    price: "Price"
+    notes: "Notes"
+    item: "Item"
+    items: "Items"
+    total: "Total"
+    vat_rate: "VAT rate"
+    vat_amount: "VAT"
+    vat_exclusive: "VAT exclusive"
+    paid_at: "Paid at"
+    title: "Invoice no. %{number}"
+    download: "Download"
+    number: "Number"
+    total_paid: "Total paid"
+    vat_rate_on_payment: "VAT rate on payment date"
+    paid_through: "Paid through"
+    customer: "Customer"
+    outstanding: "Outstanding invoices"
+    paid: "Paid invoices"
+    cancelled: "Cancelled invoices"
+    mark_as_paid: "Mark as paid"
+    marked_as_paid: "Invoice marked as paid."
+    already_paid: "Invoice is already paid."
+
+    show:
+      pay: "Pay"
+
+    edit:
+      title: "Edit your invoice"
+
+    index:
+      title: "Your invoices"
+      pay: "Pay all issued invoices"
+
+  activerecord:
+    enums:
+      invoice:
+        statuses:
+          issued: "Issued"
+          paid: "Paid"
+          cancelled: "Cancelled"

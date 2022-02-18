@@ -1,0 +1,86 @@
+<% content_for :hero do %>
+<div class="hero blue">
+    <h1>Services</h1>
+</div>
+<% end %>
+
+<div class="ui container">
+    <div class="margin-block">
+        <h2>Waiting for approval</h2>
+        <table class="ui table unstackable fixed" id="users-table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <%= t('services.name') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('services.customer') %>
+                    </th>
+                    <th scope="col" class="six wide">
+                        <%= t('services.callback_url') %>
+                    </th>
+                    <th scope="col"><%= t('services.status') %></th>
+                </tr>
+            </thead>
+
+            <tbody id="users-table-body">
+                <% @unapproved_services.each do |service| %>
+                <tr class="users-table-row">
+                    <td class="user-table-user-name"><%= link_to service.name, admin_service_path(service) %></td>
+                    <td><%= "#{service.user&.given_names} #{service.user&.surname}"%></td>
+                    <td><%= service.callback_url %></td>
+                    <td><%= status_pill(service.status) %></td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% unless @unapproved_services.any? %>
+        <div class="ui center aligned placeholder segment">
+            <div class="ui icon header">
+                <i class="microchip icon"></i>
+                No unapproved services yet.
+            </div>
+        </div>
+        <% else %>
+        <%= paginate @unapproved_services, param_name: :unapproved_page %>
+        <% end %>
+        <h2>Active services</h2>
+        <table class="ui table unstackable fixed" id="users-table">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        <%= t('services.name') %>
+                    </th>
+                    <th scope="col">
+                        <%= t('services.customer') %>
+                    </th>
+                    <th scope="col" class="six wide">
+                        <%= t('services.callback_url') %>
+                    </th>
+                    <th scope="col"><%= t('services.status') %></th>
+                </tr>
+            </thead>
+
+            <tbody id="users-table-body">
+                <% @services.each do |service| %>
+                <tr class="users-table-row">
+                    <td class="user-table-user-name"><%= link_to service.name, admin_service_path(service) %></td>
+                    <td><%= "#{service.user.given_names} #{service.user.surname}"%></td>
+                    <td><%= service.callback_url %></td>
+                    <td><%= status_pill(service.status) %></td>
+                </tr>
+                <% end %>
+            </tbody>
+        </table>
+        <% unless @services.any? %>
+        <div class="ui center aligned placeholder segment">
+            <div class="ui icon header">
+                <i class="microchip icon"></i>
+                No active services yet.
+            </div>
+        </div>
+        <% else %>
+        <%= paginate @services, param_name: :services_page %>
+        <% end %>
+    </div>
+</div>

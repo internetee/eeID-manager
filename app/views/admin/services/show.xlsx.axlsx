@@ -1,0 +1,35 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Client") do |sheet|
+  sheet.add_row [
+    "Institution name", 
+    "Institution registry code", 
+    "Client ID", 
+    "Redirect URI", 
+    "Secret", 
+    "Return URL (legacy)", 
+    "Client name (et)", 
+    "Client name (en)", 
+    "Client name (ru)", 
+    "Client shortname (et)", 
+    "Client shortname (en)", 
+    "Client shortname (ru)", 
+    "Contacts", 
+    "Description" ]
+  sheet.add_row [
+    @service.contact.name,
+    @service.contact.identity_code, 
+    @service.regex_service_name, 
+    @service.callback_url,
+    @service.password,
+    nil,
+    @service.name,
+    @service.name,
+    @service.name,
+    @service.name,
+    @service.name,
+    @service.name,
+    @user.to_json_array_contact,
+    @service.short_description
+  ]
+end

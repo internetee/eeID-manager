@@ -1,0 +1,26 @@
+<% content_for :hero do %>
+    <div class="hero blue">
+        <h1><%= t('.create_new_service') %></h1>
+    </div>
+<% end %>
+
+<%= render 'common/top_grid' %>
+
+<div class="u-container">
+    <div class="u-container margin-block">
+        <% if @service.errors.any? %>
+            <div class="ui message">
+                <div class="header">
+                    <%= t(:errors_name) %>
+                </div>
+                <ul id="errors">
+                    <% @service.errors.full_messages.each do |message| %>
+                        <li><%= message %></li>
+                    <% end %>
+                </ul>
+            </div>
+        <% end %>
+
+        <%= render 'form', service: @service, url: services_path %>
+    </div>
+</div>

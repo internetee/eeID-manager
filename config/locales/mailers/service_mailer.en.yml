@@ -1,0 +1,8 @@
+en:
+  service_mailer:
+    service_created:
+      subject: "Application for eID service %{name} received!"
+    service_approved:
+      subject: "Your eID service %{name} has been approved!"
+    service_rejected:
+      subject: "Your eID service %{name} has been rejected!"

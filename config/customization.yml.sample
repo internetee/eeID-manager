@@ -1,0 +1,101 @@
+default: &default
+  application_name: "eID Manager"
+  time_zone: "Tallinn"
+  devise_secret_key: "Your very secret key used for devise tokens"
+
+  # Address from which the emails come from
+  email_from_address: "noreply@internet.ee"
+
+  tos_link: https://www.internet.ee/domains/ee-domain-regulation
+  cas_management: https://tara-test.infra.tld.ee/cas-management
+
+  mailer:
+    host: 'https://eid.test'
+    address: 'mailcatcher'
+    port: '1025'
+    enable_starttls_auto: false
+    user_name: ''
+    password: ''
+    # 'plain', 'login', 'cram_md5'
+    authentication: 'plain'
+    domain: ''
+    openssl_verify_mode: 'none'
+
+  airbrake:
+    host: ''
+    project_id: ''
+    project_key: ''
+
+  billing:
+    issuer: 'Eesti Interneti SA'
+    vat_id: 'EE123'
+    reg_no: '123123123'
+    address: 'Paldiski mnt 80, 10617 Tallinn'
+    auth_price: 9 # Authentication price in cents (excl VAT)
+    autotopup_min_cents: 500 # Minimal amount for PSD2 / CC payments
+    balance_critical_cents: 500
+
+  payment_methods:
+    enabled_methods:
+      - "PaymentOrders::Psd2"
+      - "PaymentOrders::Sepa"
+    psd2:
+      url: 'https://igw-demo.every-pay.com/api/v4'
+      user: '123'
+      key: '123'
+      account_id: '123'
+      icon: '/images/payment_methods/every_pay.png'
+      linkpay_prefix: 'https://igw-demo.every-pay.com/lp'
+      linkpay_check_prefix: 'https://igw-demo.every-pay.com/api/v4/payments/'
+      linkpay_token: '123'
+    sepa:
+      billing_account_iban: 'EE12 1234 1234 1234'
+      billing_account_bank_name: 'AS LHV PANK'
+      billing_account_beneficiary: 'Eesti Interneti SA'
+      billing_account_bic: 'BIC123'
+      lhv_p12_keystore: ''
+      lhv_keystore_password: ''
+      lhv_ca_file: ''
+      lhv_dev_mode: true
+
+  tara:
+    host: 'tara-test.infra.tld.ee'
+    issuer: 'https://tara-test.infra.tld.ee'
+    identifier: '123'
+    secret: '123'
+    redirect_uri: 'http://localhost:3000/auth/tara/callback'
+    keys:
+      kty: RSA
+      n: iVKwG5cTHFx60wYLndRLlzlvH9m2XsVaWh0LQFcvQBCcUMXjCYQRJ22sLjAz6fvig83dWcoKQVanZfzNGAqG_I54LIVT6oUZxFgCA1cyFKELaCqnpzQa3m7CBOklQUV7Z6Dtj1bMJiMIaEv8lzhtKmqkC6o2xjTWIbVCBublwF0DH5SsVdeX-kC4aJtYCbhsuYuzrn4VpR33NuvLxOBPHDVCMYImxlYU337uf6DjmdZMV96ODqP7E9iMS3GWk_MJEzrgLU7_7JiO3OWtkBUNspZ7pgNdIc6OQ5ZASfWsUufS44kt1fNmPqowklHCRNqcnFOx0lc7ya_VlCdXV6Qfew
+      e: AQAB
+
+development:
+  <<: *default
+test:
+  <<: *default
+
+  payment_methods:
+    enabled_methods:
+      - "PaymentOrders::Psd2"
+      - "PaymentOrders::Sepa"
+
+    psd2:
+      url: 'https://igw-demo.every-pay.com/api/v3'
+      user: 'api_user'
+      key: 'api_key'
+      account_id: '123'
+      icon: '/images/payment_methods/every_pay.png'
+    sepa:
+      billing_account_iban: 'EE12 1234 1234 1234'
+      billing_account_bank_name: 'AS LHV PANK'
+      billing_account_beneficiary: 'Eesti Interneti SA'
+      billing_account_bic: 'BIC123'
+      lhv_p12_keystore: ''
+      lhv_keystore_password: ''
+      lhv_ca_file: ''
+      lhv_dev_mode: true
+
+staging:
+  <<: *default
+production:
+  <<: *default

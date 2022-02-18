@@ -1,0 +1,7 @@
+<div class="features-grid top grey" style="">
+    <div class="overview">
+        <div class="u-container">
+            <span class="title">Your balance is <strong><%= number_with_precision((current_user.balance_cents.to_f / 100.to_f), precision: 2)%>€</strong>. It is sufficient for <strong><%= current_user.balance_cents / Setting.fetch(:billing, :auth_price) %></strong> sessions.</span>
+        </div>
+    </div>
+</div>

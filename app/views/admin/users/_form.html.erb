@@ -1,0 +1,120 @@
+<%= form_with(model: user, url: url, local: true, id: 'user_form', class: 'ui form big') do |f| %>
+<div class="ui two column doubling stackable grid">
+    <div class="column">
+        <h3 class="p3"><%= t('.account_data') %></h3>
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="field">
+                    <%= f.label :given_names, t('users.given_names') %>
+                    <%= f.text_field :given_names, autofocus: true, autocomplete: "off" %>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <%= f.label :surname, t('users.surname') %>
+                    <%= f.text_field :surname, autofocus: true, autocomplete: "off" %>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <%= f.hidden_field :locale, value: user.persisted? ? user.locale : I18n.locale %>
+            <%= f.label :email, t('users.email') %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+            <% if user.pending_reconfirmation? %>
+            <div><%= t('.currently_pending_confirmation', email: user.unconfirmed_email) %></div>
+            <% end %>
+        </div>
+        <div class="field">
+            <%= f.label :mobile_phone, t('users.mobile_phone') %>
+            <%= f.telephone_field :mobile_phone, autofocus: true, autocomplete: "off",
+                    placeholder: "+372xxxxxxxx" %>
+        </div>
+        <div class="field">
+            <%= f.label :country, t('users.country') %>
+            <%= f.select :country_code,
+                options_for_select(
+                    Countries.for_selection,
+                    user.country_code || 'EE'
+                ),
+                { readonly: false },
+                class: "ui dropdown" %>
+        </div>
+        <div class="field">
+            <div class="ui checkbox">
+                <%= f.check_box :accepts_terms_and_conditions, { value: user.accepts_terms_and_conditions }, "true", "false" %>
+                <%= f.label :accepts_terms_and_conditions do %>
+                <%= t('users.i_accept_terms_and_conditions_html',
+                              link: link_to(t('users.terms_and_conditions_link'), Setting.fetch(:tos_link), target: :_blank)) %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <h3 class="p3"><%= t('.billing_data') %></h3>
+        <div class="field">
+            <%= f.label :billing_recipient, t('users.billed_to') %>
+            <%= f.text_field :billing_recipient, required: true, class: "form-control" %>
+        </div>
+
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="field">
+                    <%= f.label :billing_alpha_two_country_code, t('users.country') %>
+                    <%= f.select :billing_alpha_two_country_code,
+                options_for_select(
+                    Countries.for_selection,
+                    user.country_code || 'EE'
+                ),
+                {},
+                class: "ui selectable searchable dropdown", required: true %>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <%= f.label :billing_vat_code, t('users.vat_code') %>
+                    <%= f.text_field :billing_vat_code, class: "form-control" %>
+                </div>
+            </div>
+        </div>
+
+        <div class="field">
+            <%= f.label :billing_street, t('users.street') %>
+            <%= f.text_field :billing_street, required: true, class: "form-control" %>
+        </div>
+
+        <div class="ui two column grid">
+            <div class="column">
+                <div class="field">
+                    <%= f.label :billing_city, t('users.city') %>
+                    <%= f.text_field :billing_city, required: true, class: "form-control" %>
+                </div>
+            </div>
+            <div class="column">
+                <div class="field">
+                    <%= f.label :billing_zip, t('users.postal_code') %>
+                    <%= f.text_field :billing_zip, required: true, class: "form-control" %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column sixteen wide">
+        <h3 class="p3"><%= t('.roles') %></h3>
+        <%- User::ROLES.each do |role| %>
+        <div class="field">
+            <div class="ui checkbox">
+                <%= f.check_box :roles, { multiple: true }, role, nil %>
+                <%= f.label role %>
+            </div>
+        </div>
+        <% end %>
+        <% if user.persisted? %>
+        <%= f.submit t(:update), class: "ui button big primary", id: "user_form_commit" %>
+        <%= link_to t(:back), :back, class: "ui button big secondary" %>
+        <% else %>
+        <%= f.submit t('.sign_up'), class: "ui button big primary", id: "user_form_commit" %>
+        <% end %>
+    </div>
+</div>
+<% end %>

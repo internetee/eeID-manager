@@ -1,0 +1,31 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+    user: customer
+    archived: false
+    created_at: <%= Time.parse("2010-07-05 00:15:00 UTC") %>
+    updated_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    callback_url: 'https://auction.test'
+    approval_description: 'Test'
+    name: 'One'
+    short_description: 'Test'
+    rejected: false
+    password: '123'
+    contact: john
+    approved: true
+    suspended: false
+    client_id: oidc-e4d47e48-8c8c-48ff-a628-d18edfe9b506-1
+
+two:
+    user: signed_in_with_omniauth
+    archived: false
+    created_at: <%= Time.parse("2010-07-05 00:15:00 UTC") %>
+    updated_at: <%= Time.parse("2010-07-05 00:16:00 UTC") %>
+    callback_url: 'https://registry.test'
+    approval_description: 'Test'
+    name: 'Two'
+    short_description: 'Test'
+    rejected: false
+    password: '123'
+    approved: false
+    suspended: false
