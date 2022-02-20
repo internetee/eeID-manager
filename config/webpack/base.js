@@ -12,6 +12,9 @@ const plugins = [
         filename: "[name].css",
         chunkFilename: "[id].css",
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV' : JSON.stringify('production')
+    })
 ]
 
 module.exports = merge(
