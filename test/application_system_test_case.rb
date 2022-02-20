@@ -10,11 +10,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   include SemanticUiHelper
 
-  setup do
-    WebMock.disable_net_connect!(allow_localhost: true)
-    stub_request(:get, /chromedriver/)
-      .to_return(status: 200, body: '', headers: {})
-  end
+  # setup do
+  #   WebMock.disable_net_connect!(allow_localhost: true)
+  #   stub_request(:get, /chromedriver/)
+  #     .to_return(status: 200, body: '', headers: {})
+  # end
 
   teardown do
     WebMock.reset!
@@ -22,23 +22,23 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
     Capybara.use_default_driver
   end
 
-  Capybara.register_driver(:headless_chrome) do |app|
-    options = ::Selenium::WebDriver::Chrome::Options.new
-    options.add_argument('--headless')
-    options.add_argument('--no-sandbox')
-    options.add_argument('--window-size=1400,1400')
-    options.add_argument('--disable-dev-shm-usage')
+  # Capybara.register_driver(:headless_chrome) do |app|
+  #   options = ::Selenium::WebDriver::Chrome::Options.new
+  #   options.add_argument('--headless')
+  #   options.add_argument('--no-sandbox')
+  #   options.add_argument('--window-size=1400,1400')
+  #   options.add_argument('--disable-dev-shm-usage')
 
-    caps = [
-      options,
-      Selenium::WebDriver::Remote::Capabilities.chrome,
-    ]
+  #   caps = [
+  #     options,
+  #     Selenium::WebDriver::Remote::Capabilities.chrome,
+  #   ]
 
-    Capybara::Selenium::Driver.new(app, browser: :chrome, capabilities: caps)
-  end
+  #   Capybara::Selenium::Driver.new(app, browser: :chrome, capabilities: caps)
+  # end
 
-  driven_by :headless_chrome
-  Capybara.server = :puma, { Silent: true }
+  # driven_by :headless_chrome
+  # Capybara.server = :puma, { Silent: true }
 
   def stub_hydra_requests_ok
     stub_request(:any, "#{API_ENDPOINT}/clients/#{@service_one.regex_service_name}")

@@ -3,6 +3,8 @@ require 'test_helper'
 class ContactsTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
+  API_ENDPOINT = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)
+
   setup do
     @user = users(:customer)
     sign_in @user
