@@ -10,9 +10,11 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   include SemanticUiHelper
 
-  WebMock.disable_net_connect!(allow_localhost: true)
-  stub_request(:get, /chromedriver/)
-    .to_return(status: 200, body: '', headers: {})
+  setup do
+    WebMock.disable_net_connect!(allow_localhost: true)
+    stub_request(:get, /chromedriver/)
+      .to_return(status: 200, body: '', headers: {})
+  end
 
   teardown do
     WebMock.reset!

@@ -2,6 +2,7 @@ require 'application_system_test_case'
 
 class InvoicesAdminTest < ApplicationSystemTestCase
   def setup
+    super
     @user = users(:administrator)
     sign_in @user
   end
