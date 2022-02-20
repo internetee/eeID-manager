@@ -63,9 +63,13 @@ default: &default
     identifier: '123'
     secret: '123'
     redirect_uri: 'http://localhost:3000/auth/tara/callback'
-    keys:
+    ory_hydra_private: 'http://hydra:4445'
+    keys: 
+      use: sig
       kty: RSA
-      n: iVKwG5cTHFx60wYLndRLlzlvH9m2XsVaWh0LQFcvQBCcUMXjCYQRJ22sLjAz6fvig83dWcoKQVanZfzNGAqG_I54LIVT6oUZxFgCA1cyFKELaCqnpzQa3m7CBOklQUV7Z6Dtj1bMJiMIaEv8lzhtKmqkC6o2xjTWIbVCBublwF0DH5SsVdeX-kC4aJtYCbhsuYuzrn4VpR33NuvLxOBPHDVCMYImxlYU337uf6DjmdZMV96ODqP7E9iMS3GWk_MJEzrgLU7_7JiO3OWtkBUNspZ7pgNdIc6OQ5ZASfWsUufS44kt1fNmPqowklHCRNqcnFOx0lc7ya_VlCdXV6Qfew
+      kid: public:b491f057-706d-4ab9-baf0-0fb97a9b3292
+      alg: RS256
+      n: r-I6Qt-Ee4eUgGoWHORazpnb34qWFO4jilJHBCdFsQkXYJEtiyPVHKdkb0_xuurs71omq0h6wiyVkP0Atse1-uEWF_KB7m498CAp_W0z9Aep4m6ixti2G7mASr4sUipGak4KLd9n2PlgxNrJ6hE3uypd32k_nGB3Q6ULeyOpNOt3FagGcgHBGJxIa8PFlPcMKEF8M__Rwj_ZsvQH2EFG7yEzEWsNjJBtAMpmRCflgRPLtzLwixRMKZfTd-oyQ92Epm-4Yww3np4W5DMaggOWgvhnPNYQq7rKorXyksRVzsmgNsN5BePcflMJ82IdD_tglZxmnMXtLSkZVkR3uwXzZe6WqQ80aL1rw02W4EhtuwAaCyG4pRvinhgUeS9h3ZRIKS56eL7AgW55tje6Bn4GeayzSbzDK5GYy2GGb__A_s5C7MqNtkHvtjDPOp7Rlp2-cIupycpTlkbMswAwSo47h-flVxGRM8XdtYYkVjHcXq88CBtxi9GSdFFrgtqtiMUo8bi5zThajl9Wii1lMUW3nKlTAWGYi-JmQPaBBIXRh5V86VNqyfa93CoAELp1VXHusy9tYcUekD38MXCAYMJpQuNETa7TS-uUZqpJAJ3ya4C5p476a0dXv9w6EevGu0bh3ySXKi4-reLkbbFmhHntqouVhGSOQnPNkv1vNhsp9V0
       e: AQAB
 
 development:
