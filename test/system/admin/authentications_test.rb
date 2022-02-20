@@ -6,7 +6,6 @@ class AuthenticationsAdminTest < ApplicationSystemTestCase
     super
     @user = users(:administrator)
     sign_in @user
-    #stub_request(:any, /chromedriver/)
   end
 
   def test_visit_authentication_page
