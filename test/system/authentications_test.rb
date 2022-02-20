@@ -2,6 +2,7 @@ require 'application_system_test_case'
 
 class AuthenticationsTest < ApplicationSystemTestCase
   def setup
+    super
     @user = users(:customer)
     sign_in @user
   end

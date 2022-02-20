@@ -9,7 +9,7 @@ end
 
 module Hydra
   class RestApi
-    API_ENDPOINT = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)
+    @api_endpoint = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)
 
     @headers = {
       'Accept' => 'application/json',
@@ -19,7 +19,7 @@ module Hydra
     class << self
       def get_client(id)
         RestClient.get(
-          "#{API_ENDPOINT}/clients/#{id}",
+          "#{@api_endpoint}/clients/#{id}",
           headers: @headers
         ) do |response|
           return response.body if response.code == 200
@@ -29,7 +29,7 @@ module Hydra
       def create_client(payload)
         RestClient::Request.execute(
           method: :post,
-          url: "#{API_ENDPOINT}/clients",
+          url: "#{@api_endpoint}/clients",
           payload: payload,
           headers: @headers
         )
@@ -38,7 +38,7 @@ module Hydra
       def update_client(id, payload)
         RestClient::Request.execute(
           method: :put,
-          url: "#{API_ENDPOINT}/clients/#{id}",
+          url: "#{@api_endpoint}/clients/#{id}",
           payload: payload,
           headers: @headers
         )
@@ -46,7 +46,7 @@ module Hydra
 
       def delete_client(id)
         RestClient.delete(
-          "#{API_ENDPOINT}/clients/#{id}",
+          "#{@api_endpoint}/clients/#{id}",
           headers: @headers
         )
       end
@@ -54,7 +54,7 @@ module Hydra
       def update_client_status(id, status)
         RestClient::Request.execute(
           method: :patch,
-          url: "#{API_ENDPOINT}/clients/#{id}",
+          url: "#{@api_endpoint}/clients/#{id}",
           payload: replace_status_json_patch(status),
           headers: @headers
         )

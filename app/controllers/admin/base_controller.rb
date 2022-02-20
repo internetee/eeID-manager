@@ -4,7 +4,7 @@ module Admin
     before_action :validate_admin_role
 
     def validate_admin_role
-      return if current_user.role?(User::ADMINISTATOR_ROLE)
+      return if current_user.admin? # role?(User::ADMINISTATOR_ROLE)
 
       redirect_to(root_path)
     end

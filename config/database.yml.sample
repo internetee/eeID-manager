@@ -7,20 +7,9 @@ default: &default
   host: <%= ENV.fetch("APP_DBHOST") { "localhost" } %>
   username: <%= ENV.fetch("APP_DBUSER") { "postgres" } %>
 
-development_tara:
-  adapter: postgresql
-  encoding: unicode
-  database: tara-database-name
-  host: host-to-tara-database
-  username: tara
-  password: tara
 development:
   <<: *default
   database: eid_manager_development
-test_tara:
-  <<: *default
-  database: eid_manager_test
-  password: password
 test:
   <<: *default
   database: eid_manager_test

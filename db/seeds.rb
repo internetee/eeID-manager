@@ -11,6 +11,9 @@ administrator = User.new(given_names: 'Default', surname: 'Administrator',
                          email: 'admin@eid.test', password: 'adminadmin',
                          password_confirmation: 'adminadmin', country_code: 'EE',
                          mobile_phone: '+37250060070', identity_code: '51007050118',
+                         billing_recipient: 'Admin', billing_street: 'Street',
+                         billing_city: 'Tallinn', billing_zip: '12345',
+                         billing_alpha_two_country_code: 'EE',
                          roles: [User::ADMINISTATOR_ROLE], accepts_terms_and_conditions: true)
 administrator.skip_confirmation!
 administrator.save!

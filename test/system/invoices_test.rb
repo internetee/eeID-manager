@@ -4,6 +4,7 @@ class InvoicesTest < ApplicationSystemTestCase
   include ActiveJob::TestHelper
   include Devise::Test::IntegrationHelpers
   def setup
+    super
     @user = users(:customer)
     @payment_order = payment_orders(:issued)
     @invoice = @payment_order.invoices.first

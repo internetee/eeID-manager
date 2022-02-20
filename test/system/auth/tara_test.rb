@@ -4,6 +4,7 @@ require 'application_system_test_case'
 
 class TaraTest < ApplicationSystemTestCase
   def setup
+    super
     ActionMailer::Base.deliveries.clear
 
     OmniAuth.config.test_mode = true

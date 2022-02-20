@@ -2,6 +2,7 @@ require 'application_system_test_case'
 
 class ServicesAdminTest < ApplicationSystemTestCase
   def setup
+    super
     @user = users(:administrator)
     @service_one = services(:one)
     sign_in @user

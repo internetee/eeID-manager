@@ -27,6 +27,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_required_fields
     user = User.new
+
     refute user.valid?
     assert_equal(["can't be blank"], user.errors[:password])
     assert_equal(["can't be blank"], user.errors[:email])

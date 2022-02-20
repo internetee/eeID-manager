@@ -20,8 +20,8 @@ class User < ApplicationRecord
   }
 
   validates :given_names, :surname, safe_value: true
-  validates :given_names, :surname, :billing_recipient,
-            :billing_street, :billing_city,
+  validates :given_names, :surname, presence: true
+  validates :billing_recipient, :billing_street, :billing_city,
             :billing_zip, :billing_alpha_two_country_code, presence: true
   validate :customer_must_accept_terms_and_conditions
   has_many :payment_orders, dependent: :nullify
@@ -35,6 +35,10 @@ class User < ApplicationRecord
     services.each { |s| s.suspend!(no_credit: no_credit) }
 
     BillingMailer.out_of_balance(self).deliver_later if no_credit
+  end
+
+  def admin?
+    role?(ADMINISTATOR_ROLE)
   end
 
   def balance_critical!
