@@ -38,13 +38,14 @@
     ]
   },
   "version": "0.0.1",
-  "description": "Billing solution for EIS TARA",
+  "description": "Billing solution for EIS TARA2",
   "main": "index.js",
-  "repository": "git@github.com:internetee/eid_manager",
+  "repository": "git@github.com:internetee/eeID-manager",
   "license": "MIT/X11",
   "contributors": [
     "Karl Erik Õunapuu <karlerik@kreative.ee>",
-    "Dinar Safiulin <dinar.safiulin@eestiinternet.ee>"
+    "Dinar Safiulin <dinar.safiulin@eestiinternet.ee>",
+    "Sergei Tsõganov <sergei.tsoganov@eestiinternet.ee>"
   ],
   "babel": {
     "presets": [

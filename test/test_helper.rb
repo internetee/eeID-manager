@@ -4,8 +4,6 @@ if ENV['COVERAGE']
   SimpleCov.start 'rails'
 end
 
-API_ENDPOINT = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)
-
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 require 'rails/test_help'
@@ -16,6 +14,8 @@ class ActiveSupport::TestCase
   WebMock.disable_net_connect!(allow_localhost: true)
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
+
+  API_ENDPOINT = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private) 
 
   # Add more helper methods to be used by all tests here...
   def clear_email_deliveries
