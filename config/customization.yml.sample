@@ -60,6 +60,9 @@ default: &default
   tara:
     host: 'tara-test.infra.tld.ee'
     issuer: 'https://tara-test.infra.tld.ee'
+    authorization_endpoint: '',
+    token_endpoint: '',
+    jwks_uri: '',
     identifier: '123'
     secret: '123'
     redirect_uri: 'http://localhost:3000/auth/tara/callback'
