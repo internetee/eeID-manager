@@ -13,6 +13,9 @@ signing_keys = EidManager::Application.config.customization.dig(:tara, :keys).to
 issuer = EidManager::Application.config.customization.dig(:tara, :issuer)
 host = EidManager::Application.config.customization.dig(:tara, :host)
 port = EidManager::Application.config.customization.dig(:tara, :port)
+authorization_endpoint = EidManager::Application.config.customization.dig(:tara, :authorization_endpoint)
+token_endpoint = EidManager::Application.config.customization.dig(:tara, :token_endpoint)
+jwks_uri = EidManager::Application.config.customization.dig(:tara, :jwks_uri)
 identifier = EidManager::Application.config.customization.dig(:tara, :identifier)
 secret = EidManager::Application.config.customization.dig(:tara, :secret)
 redirect_uri = EidManager::Application.config.customization.dig(:tara, :redirect_uri)
@@ -32,11 +35,10 @@ Rails.application.config.middleware.use OmniAuth::Builder do
       scheme: 'https',
       host: host,
       port: port,
-      authorization_endpoint: '/oauth2/auth',
-      token_endpoint: '/oauth2/token',
+      authorization_endpoint: authorization_endpoint,
+      token_endpoint: token_endpoint,
       userinfo_endpoint: nil, # Not implemented
-      jwks_uri: '/.well-known/jwks.json',
-
+      jwks_uri: jwks_uri,
       identifier: identifier,
       secret: secret,
       redirect_uri: redirect_uri,
