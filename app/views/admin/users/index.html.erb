@@ -38,6 +38,7 @@
                         <%= order_buttons('users.email') %>
                     </th>
                     <th scope="col"><%= t('users.roles') %></th>
+                    <th scope="col"><%= t('users.balance') %></th>
                     <th scope="col"><%= clear_order_button %></th>
                 </tr>
             </thead>
@@ -51,6 +52,7 @@
                         </td>
                         <td><%= user.email %></td>
                         <td><%= user.roles.join(', ') %></td>
+                        <td><%= number_with_precision((user.balance_cents.to_f / 100.to_f), precision: 2) %></td>
                         <td></td>
                     </tr>
                 <% end %>
