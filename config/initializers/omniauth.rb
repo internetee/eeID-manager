@@ -19,6 +19,7 @@ jwks_uri = EidManager::Application.config.customization.dig(:tara, :jwks_uri)
 identifier = EidManager::Application.config.customization.dig(:tara, :identifier)
 secret = EidManager::Application.config.customization.dig(:tara, :secret)
 redirect_uri = EidManager::Application.config.customization.dig(:tara, :redirect_uri)
+scheme = EidManager::Application.config.customization.dig(:tara, :scheme)
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider 'tara', {
@@ -32,7 +33,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     issuer: issuer,
 
     client_options: {
-      scheme: 'https',
+      scheme: scheme,
       host: host,
       port: port,
       authorization_endpoint: authorization_endpoint,
