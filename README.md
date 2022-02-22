@@ -1,7 +1,7 @@
 # eeID Manager
 
-[![Code Climate](https://codeclimate.com/github/internetee/eid_manager/badges/gpa.svg)](https://codeclimate.com/github/internetee/eid_manager)
-[![Test Coverage](https://codeclimate.com/github/internetee/eid_manager/badges/coverage.svg)](https://codeclimate.com/github/internetee/eid_manager/coverage)
+[![Code Climate](https://codeclimate.com/github/internetee/eeID-manager/badges/gpa.svg)](https://codeclimate.com/github/internetee/eeID-manager)
+[![Test Coverage](https://codeclimate.com/github/internetee/eeID-manager/badges/coverage.svg)](https://codeclimate.com/github/internetee/eeID-manager/coverage)
 
 Billing solution for EIS TARA2 service
 
@@ -26,7 +26,7 @@ password: adminadmin
 System provides API endpoint to which TARA syslog can send output to.
 
 ### Syslog API
-eID Bridge is going to forward TARA logs to this application over REST API. You can create fake fetchable TARA logs by manual API calls.
+eID Bridge is going to forward TARA logs to this application over REST API.
 
 ## Settings
 
@@ -34,6 +34,6 @@ All the application settings are configurable from config/customization.yml file
 
 ## Jobs
 
-To send out emails and perform other asynchronous tasks, we use a Sidekiq with Redis as queue backend. To start an executor, use `bundle exec sidekiq -q default -q mailers`.
+To send out emails and perform other asynchronous tasks, we use a Sidekiq with Redis as queue backend.
 
 Jobs are scheduled outside of the application, as the exact times are no concern of the application.
