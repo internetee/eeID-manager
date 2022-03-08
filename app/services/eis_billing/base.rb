@@ -11,7 +11,7 @@ module EisBilling
                                              &.compact&.fetch(:eis_billing_system_base_url_dev, '')
     end
 
-    INITIATOR = 'eeid'
+    INITIATOR = 'eeid'.freeze
 
     SECRET_WORD = EidManager::Application.config
                                               .customization[:billing_system_integration]

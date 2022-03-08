@@ -17,10 +17,14 @@ class InvoicesController < ApplicationController
     if invoice.save
       invoice.reload
       @payment_order = PaymentOrder.new_from_invoice(invoice)
-      send_invoice_to_billing_system(invoice)
+      send_invoice_to_billing_system(invoice) if Feature.billing_system_integration_enabled?
       respond_to do |format|
         if @payment_order.save && @payment_order.reload
-          format.html { redirect_to invoice.payment_link }
+          if Feature.billing_system_integration_enabled?
+            format.html { redirect_to invoice.payment_link }
+          else
+            format.html { redirect_to @payment_order.linkpay_url }
+          end
           format.json { render :show, status: :created, location: @payment_order }
         else
           format.html { redirect_to invoices_path(@payment_order.invoice), notice: t(:error) }
