@@ -1,6 +1,7 @@
 require 'countries'
 
 class Invoice < ApplicationRecord
+  include Invoice::BookKeeping
 
   alias_attribute :country_code, :alpha_two_country_code
   enum status: { issued: 'issued', paid: 'paid', cancelled: 'cancelled' }
@@ -15,7 +16,29 @@ class Invoice < ApplicationRecord
   validates :cents, numericality: { only_integer: true, greater_than: 0 }
   before_create :copy_billing_address_from_user
 
+  before_create :set_invoice_number
+
   scope :overdue, -> { where('due_date < ? AND status = ?', Time.zone.today, statuses[:issued]) }
+
+  def set_invoice_number
+    if Feature.billing_system_integration_enabled?
+      result = EisBilling::GetInvoiceNumber.send_invoice
+
+      if JSON.parse(result.body)['code'] == '403'
+        errors.add(:base, I18n.t('cannot get access'))
+        logger.error('PROBLEM WITH TOKEN')
+        throw(:abort)
+      end
+
+      if JSON.parse(result.body)['error'] == 'out of range'
+        errors.add(:base, I18n.t('failed_to_generate_invoice_invoice_number_limit_reached'))
+        logger.error('INVOICE NUMBER LIMIT REACHED, COULD NOT GENERATE INVOICE')
+        throw(:abort)
+      end
+
+      self.number = JSON.parse(result.body)['invoice_number'].to_i
+    end
+  end
 
   def self.by_top_up_request(user:, cents:, psd2: true)
     inv = Invoice.new

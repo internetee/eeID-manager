@@ -17,9 +17,10 @@ class InvoicesController < ApplicationController
     if invoice.save
       invoice.reload
       @payment_order = PaymentOrder.new_from_invoice(invoice)
+      send_invoice_to_billing_system(invoice)
       respond_to do |format|
         if @payment_order.save && @payment_order.reload
-          format.html { redirect_to @payment_order.linkpay_url }
+          format.html { redirect_to invoice.payment_link }
           format.json { render :show, status: :created, location: @payment_order }
         else
           format.html { redirect_to invoices_path(@payment_order.invoice), notice: t(:error) }
@@ -46,5 +47,15 @@ class InvoicesController < ApplicationController
     raw_pdf = pdf.to_pdf
 
     send_data(raw_pdf, filename: @invoice.filename)
+  end
+
+  private
+
+  def send_invoice_to_billing_system(invoice)
+    add_invoice_instance = EisBilling::Invoice.new(invoice)
+    result = add_invoice_instance.send_invoice
+    link = JSON.parse(result.body)['everypay_link']
+
+    invoice.update(payment_link: link)
   end
 end

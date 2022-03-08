@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/internetee/directo.git
+  revision: 711ce2d942456ee830b649b03b7141e903a1d86b
+  branch: master
+  specs:
+    directo (1.0.1)
+      money (~> 6.13)
+      nokogiri (~> 1.10)
+
+GIT
   remote: https://github.com/internetee/lhv.git
   revision: 1fb07818369425510a0172ad53bc86e85b6f83cc
   branch: master
@@ -150,6 +159,7 @@ GEM
       activesupport (>= 4.2)
       aes_key_wrap
       bindata
+    jwt (2.3.0)
     kaminari (1.2.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.1)
@@ -361,7 +371,9 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
+  directo!
   jbuilder (~> 2.11)
+  jwt
   kaminari
   lhv!
   listen (>= 3.0.5, < 3.8)
