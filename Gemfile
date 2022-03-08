@@ -49,3 +49,10 @@ group :test do
 end
 
 gem "sidekiq", "~> 6.2"
+
+# token
+gem 'jwt'
+
+# account
+gem 'directo', github: 'internetee/directo', branch: 'master'
+
