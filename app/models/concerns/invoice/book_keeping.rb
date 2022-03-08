@@ -17,7 +17,7 @@ module Invoice::BookKeeping
   def compose_directo_product
     [{ 'product_id': 'ETTEM06', 'description': "Order nr. #{number}",
        'quantity': 1, 'price': ActionController::Base.helpers.number_with_precision(
-         '23', precision: 2, separator: '.'
+         price.to_s, precision: 2, separator: '.'
        ) }].as_json
   end
 
