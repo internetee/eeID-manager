@@ -9,6 +9,9 @@ class InvoicesController < ApplicationController
     #                   iban: sepa_details[:billing_account_iban],
     #                   bic: sepa_details[:billing_account_bic],
     #                   bank: sepa_details[:billing_account_bank_name] }
+    Invoice.where(status: 'issued').each do |invoice|
+      EisBilling::SetInvoiceStatus.ping_status(invoice)
+    end
   end
 
   def create
@@ -42,6 +45,7 @@ class InvoicesController < ApplicationController
   # GET /invoices/aa450f1a-45e2-4f22-b2c3-f5f46b5f906b
   def show
     @invoice = current_user.invoices.find_by(uuid: params[:uuid])
+    EisBilling::SetInvoiceStatus.ping_status(@invoice)
   end
 
   def download
