@@ -14,7 +14,7 @@
             <div class="ui right labeled right action input">
                 <label for="amount" style="background-color: #A7A8AA; color: white" class="ui blue label">EUR</label>
                 <%= f.number_field :amount, value: '10.00' %>
-                <%= button_tag(type: "submit", class: 'ui blue labeled icon button') do %>
+                <%= button_tag(type: "submit", class: 'ui blue labeled icon button', :formtarget => "_blank") do %>
                 <i class="cart icon"></i> Top up now
                 <% end %>
             </div>
