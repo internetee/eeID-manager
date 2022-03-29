@@ -32,6 +32,8 @@ class ServicesTest < ApplicationSystemTestCase
   end
 
   def test_update_new_service
+    stub_request(:any, /#{API_ENDPOINT}.*/)
+
     create_new_service
     visit_authentication_page
 
@@ -41,12 +43,13 @@ class ServicesTest < ApplicationSystemTestCase
 
     fill_in 'service_name', with: 'Awesome service'
     click_on 'Submit for approval'
-
     assert_text 'Service was successfully updated.'
     assert_text 'Awesome service'
   end
 
   def test_update_approved_service_not_important_attributes
+    stub_request(:any, /#{API_ENDPOINT}.*/)
+
     visit services_path
     assert_text 'One'
     assert_text 'ACTIVE'

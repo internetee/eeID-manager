@@ -55,7 +55,11 @@
 
         <div class="column wide sixteen">
             <%= link_to t(:back), :back, class: "ui button secondary" %>
-            <%= f.submit 'Submit for approval', class: "ui button primary" %>
+            <% unless service.persisted? %>
+                <%= f.submit 'Submit for approval', class: "ui button primary" %>
+            <% else %>
+                <%= f.submit 'Update', class: "ui button primary" %>
+            <% end %>
         </div>
     </div>
 </div>
