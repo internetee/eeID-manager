@@ -42,7 +42,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_name', with: 'Awesome service'
-    click_on 'Submit for approval'
+    click_on 'Update'
     assert_text 'Service was successfully updated.'
     assert_text 'Awesome service'
   end
@@ -57,7 +57,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_name', with: 'Awesome service'
-    click_on 'Submit for approval'
+    click_on 'Update'
     assert_text 'Service was successfully updated.'
     assert_text 'Awesome service'
     assert_text 'ACTIVE'
@@ -74,7 +74,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_callback_url', with: 'https://another_callback_url'
-    click_on 'Submit for approval'
+    click_on 'Update'
 
     assert_text 'Service was successfully updated.'
     assert_text 'AWAITING_APPROVAL'
@@ -90,7 +90,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_callback_url', with: 'Awesome service'
-    click_on 'Submit for approval'
+    click_on 'Update'
 
     assert_text 'Callback url is invalid'
     assert page.has_css?('.ui.message')
