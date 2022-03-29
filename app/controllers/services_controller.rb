@@ -33,12 +33,12 @@ class ServicesController < ApplicationController
         format.json { render :show, status: :created, location: @network }
       else
         format.html { render :new }
-        format.json { render json: @network.errors, status: :unprocessable_entity }
+        format.json { render json: @service.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  def update
+  def update_old
     @service_params[:auth_methods] ||= []
     @service.disapprove! if attributes_changed? && @service.approved?
 
@@ -46,6 +46,7 @@ class ServicesController < ApplicationController
 
     respond_to do |format|
       if @service.update(@service_params)
+        # @service.update_hydra_client
         format.html { redirect_to @service, notice: 'Service was successfully updated.' }
         format.json { render :show, status: :ok, location: @service }
       else
@@ -53,6 +54,39 @@ class ServicesController < ApplicationController
         format.json { render json: @service.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  def update
+    @service_params[:auth_methods] ||= []
+    update_emails
+    disapprove if attributes_changed? && @service.approved?
+    @service.assign_attributes(@service_params)
+    respond_to do |format|
+      begin
+        if @service.valid?
+          @service.update_hydra_client
+          @service.disapprove_hydra_client unless @service.approved?
+          @service.save
+          format.html { redirect_to @service, notice: 'Service was successfully updated.' }
+          format.json { render :show, status: :ok, location: @service }
+        else
+          format.html { render :edit }
+          format.json { render json: @service.errors, status: :unprocessable_entity }
+        end
+      rescue RestClient::ExceptionWithResponse => e
+        format.html do
+          flash.now[:notice] = e.error
+          render :edit
+        end
+      end
+    end
+  end
+
+  def disapprove
+    @service_params[:client_id] = nil
+    @service_params[:rejected] = false
+    @service_params[:approved] = false
+    @service_params[:suspended] = false
   end
 
   def destroy
@@ -64,10 +98,12 @@ class ServicesController < ApplicationController
   end
 
   def service_params
-    @service_params ||= params.require(:service).permit(:name, :short_description, :user_id, :callback_url,
-                                                        :approval_description, :id, :client_id, :contact_id,
+    @service_params ||= params.require(:service).permit(:name, :short_description, :user_id,
+                                                        :callback_url, :approval_description,
+                                                        :id, :client_id, :contact_id,
                                                         :tech_email, :interrupt_email,
-                                                        :environment, auth_methods: [])
+                                                        :environment, :approved, :suspended,
+                                                        :rejected, :archived, auth_methods: [])
   end
 
   def cors_preflight_check

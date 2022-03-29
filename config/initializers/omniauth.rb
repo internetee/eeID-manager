@@ -20,11 +20,12 @@ identifier = EidManager::Application.config.customization.dig(:tara, :identifier
 secret = EidManager::Application.config.customization.dig(:tara, :secret)
 redirect_uri = EidManager::Application.config.customization.dig(:tara, :redirect_uri)
 scheme = EidManager::Application.config.customization.dig(:tara, :scheme)
+scope = EidManager::Application.config.customization.dig(:tara, :scope)
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider 'tara', {
     name: 'tara',
-    scope: %w[openid idcard mid smartid],
+    scope: scope,
     state: SecureRandom.hex(10),
     client_signing_alg: :RS256,
     client_jwk_signing_key: signing_keys,

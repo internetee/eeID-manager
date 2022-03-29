@@ -36,7 +36,7 @@
         </div>
         <div class="field">
             <%= f.label 'service[auth_methods]', 'Authentication methods' %>
-            <%= select_tag 'service[auth_methods]', options_for_select([['id-card','idcard'], ['mobile-id','mid'], ['smart-id','smartid']], auth_methods(service)), {multiple: true, required: false, autofocus: true, class: 'ui compact selection dropdown'} %>
+            <%= select_tag 'service[auth_methods]', options_for_select([['id-card','idcard'], ['mobile-id','mid'], ['smart-id','smartid'], ['eidas', 'eidas']], auth_methods(service)), {multiple: true, required: false, autofocus: true, class: 'ui compact selection dropdown'} %>
         </div>
         <div class="field">
             <%= f.label :contact_id do "Choose from contacts or #{link_to('create new', new_contact_path)}".html_safe end %>
