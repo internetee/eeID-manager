@@ -38,24 +38,6 @@ class ServicesController < ApplicationController
     end
   end
 
-  def update_old
-    @service_params[:auth_methods] ||= []
-    @service.disapprove! if attributes_changed? && @service.approved?
-
-    update_emails
-
-    respond_to do |format|
-      if @service.update(@service_params)
-        # @service.update_hydra_client
-        format.html { redirect_to @service, notice: 'Service was successfully updated.' }
-        format.json { render :show, status: :ok, location: @service }
-      else
-        format.html { render :edit }
-        format.json { render json: @service.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   def update
     @service_params[:auth_methods] ||= []
     update_emails
