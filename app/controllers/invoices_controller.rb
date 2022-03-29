@@ -4,11 +4,6 @@ class InvoicesController < ApplicationController
   def index
     @transactions = current_user.transactions.order(created_at: :desc).all.page(params[:transactions_page]).per(5)
     @invoices = current_user.invoices.where(status: 'paid').order(created_at: :desc).all.page(params[:invoices_page]).per(5)
-    # sepa_details = Rails.application.config.customization.dig(:payment_methods, :sepa)
-    # @sepa_account = { beneficiary: sepa_details[:billing_account_beneficiary],
-    #                   iban: sepa_details[:billing_account_iban],
-    #                   bic: sepa_details[:billing_account_bic],
-    #                   bank: sepa_details[:billing_account_bank_name] }
   end
 
   def create

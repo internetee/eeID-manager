@@ -6,17 +6,7 @@ module EisBilling
     before_action :persistent
     before_action :authorized
 
-    SECRET_WORD = EidManager::Application.config
-                                            .customization[:billing_system_integration]
-                                            &.compact&.fetch(:secret_word, '')
-
-    SECRET_ACCESS_WORD = EidManager::Application.config
-                                                   .customization[:billing_system_integration]
-                                                   &.compact&.fetch(:secret_access_word, '')
-
-    def encode_token(payload)
-      JWT.encode(payload, SECRET_WORD)
-    end
+    INITIATOR = 'billing'.freeze
 
     def auth_header
       # { Authorization: 'Bearer <token>' }
@@ -27,7 +17,7 @@ module EisBilling
       if auth_header
         token = auth_header.split(' ')[1]
         begin
-          JWT.decode(token, SECRET_WORD, true, algorithm: 'HS256')
+          JWT.decode(token, billing_secret_key, true, algorithm: 'HS256')
         rescue JWT::DecodeError
           nil
         end
@@ -35,9 +25,9 @@ module EisBilling
     end
 
     def accessable_service
-      if decoded_token
-        decoded_token[0]['data'] == SECRET_ACCESS_WORD
-      end
+      return decoded_token[0]['initiator'] == INITIATOR if decoded_token
+
+      false
     end
 
     def logged_in?
@@ -49,10 +39,6 @@ module EisBilling
     end
 
     def logger
-      Rails.logger
-    end
-
-    def logger
       @logger ||= Rails.logger
     end
 
@@ -60,6 +46,10 @@ module EisBilling
       return true if Feature.billing_system_integration_enabled?
 
       render json: { message: "We don't work yet!" }, status: :unauthorized
+    end
+
+    def billing_secret_key
+      EidManager::Application.config.customization[:billing_system_integration]&.compact&.fetch(:billing_secret, '')
     end
   end
 end
