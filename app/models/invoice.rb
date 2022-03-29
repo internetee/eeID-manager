@@ -38,11 +38,6 @@ class Invoice < ApplicationRecord
     end
   end
 
-  def get_response_from_billing
-    response = EisBilling::GetInvoiceStatus.send_invoice(invoice_number: number)
-    JSON.parse(response.body, symbolize_names: true)
-  end
-
   def self.by_top_up_request(user:, cents:, psd2: true)
     inv = Invoice.new
     inv.user = user
