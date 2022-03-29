@@ -1,22 +1,18 @@
 class ContactsController < ApplicationController
   before_action :authenticate_user!, only: %i[show edit update destroy edit_authwall]
-  before_action :set_user, only: %i[show edit update destroy]
+  before_action :set_contact, only: %i[show edit update destroy]
 
   def index
     @contacts = current_user.contacts.page(params[:page])
   end
 
-  def show
-    @contact = current_user.contacts.find(params[:id])
-  end
+  def show; end
 
   def new
     @contact = current_user.contacts.new
   end
 
-  def edit
-    @contact = current_user.contacts.find(params[:id])
-  end
+  def edit; end
 
   def create
     @contact = current_user.contacts.new(contacts_params)
@@ -34,8 +30,6 @@ class ContactsController < ApplicationController
   end
 
   def update
-    @contact = current_user.contacts.find(params[:id])
-
     respond_to do |format|
       if @contact.update(contacts_params)
         format.html { redirect_to @contact, notice: 'Contact was successfully updated.' }
@@ -73,7 +67,7 @@ class ContactsController < ApplicationController
     contacts.update_all(default: false)
   end
 
-  def set_user
-    @contact = current_user.contacts.find_by(id: params[:id])
+  def set_contact
+    @contact = current_user.contacts.find(params[:id])
   end
 end

@@ -13,14 +13,16 @@ class ContactsTest < ActionDispatch::IntegrationTest
 
   def test_test_forbidding_destroy_contact_used_by_service
     assert_equal @user.contacts.count, 2
-    contact = contacts(:john)
-    delete contact_path(contact)
 
-    assert_equal @user.contacts.count, 2
+    contact = contacts(:john)
+
+    assert_no_difference '@user.contacts.count' do
+      delete contact_path(contact)
+    end
 
     contact.services.first.archive!
-    delete contact_path(contact)
-
-    assert_equal @user.contacts.count, 1
+    assert_difference '@user.contacts.count', -1, 'A Contact should be destroyed' do
+      delete contact_path(contact)
+    end
   end
 end

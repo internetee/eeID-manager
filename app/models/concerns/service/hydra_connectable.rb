@@ -47,7 +47,7 @@ module Concerns
       def disapprove_hydra_client
         API_CLIENT.update_client_status(
           regex_service_name,
-          'WAITING_FOR_REAPPROVAL'
+          'AWAITING_APPROVAL'
         )
       end
 

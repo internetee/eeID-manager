@@ -32,6 +32,8 @@ class ServicesTest < ApplicationSystemTestCase
   end
 
   def test_update_new_service
+    stub_request(:any, /#{API_ENDPOINT}.*/)
+
     create_new_service
     visit_authentication_page
 
@@ -40,13 +42,14 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_name', with: 'Awesome service'
-    click_on 'Submit for approval'
-
+    click_on 'Update'
     assert_text 'Service was successfully updated.'
     assert_text 'Awesome service'
   end
 
   def test_update_approved_service_not_important_attributes
+    stub_request(:any, /#{API_ENDPOINT}.*/)
+
     visit services_path
     assert_text 'One'
     assert_text 'ACTIVE'
@@ -54,7 +57,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_name', with: 'Awesome service'
-    click_on 'Submit for approval'
+    click_on 'Update'
     assert_text 'Service was successfully updated.'
     assert_text 'Awesome service'
     assert_text 'ACTIVE'
@@ -71,7 +74,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_callback_url', with: 'https://another_callback_url'
-    click_on 'Submit for approval'
+    click_on 'Update'
 
     assert_text 'Service was successfully updated.'
     assert_text 'AWAITING_APPROVAL'
@@ -87,7 +90,7 @@ class ServicesTest < ApplicationSystemTestCase
     click_link 'Edit service details'
 
     fill_in 'service_callback_url', with: 'Awesome service'
-    click_on 'Submit for approval'
+    click_on 'Update'
 
     assert_text 'Callback url is invalid'
     assert page.has_css?('.ui.message')
