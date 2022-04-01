@@ -44,9 +44,9 @@ end
 group :test do
   gem 'capybara', '>= 2.15'
   gem 'simplecov', require: false
+  gem 'spy'
   gem 'webdrivers'
   gem 'webmock'
-  gem 'spy'
 end
 
 gem "sidekiq", "~> 6.2"

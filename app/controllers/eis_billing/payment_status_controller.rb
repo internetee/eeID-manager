@@ -12,7 +12,7 @@ module EisBilling
 
       payment_order.check_linkpay_status
 
-      render status: 200, json: { status: 'ok' }
+      render status: :ok
     end
 
     private
