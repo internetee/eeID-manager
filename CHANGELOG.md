@@ -1,3 +1,6 @@
+18.04.2022
+* workflow update [#13](https://github.com/internetee/eeID-manager/pull/13)
+
 14.01.2022
 * Admin notifications on new service requests [#147](https://github.com/internetee/eid_manager/issues/147)
 * Added Ruby 3.0.2 test pipeline [#144](https://github.com/internetee/eid_manager/pull/144)
