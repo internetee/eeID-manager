@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     match '/auth/tara/callback', via: %i[get post], to: 'auth/tara#callback', as: :tara_callback
     match '/auth/tara/cancel', via: %i[get post delete], to: 'auth/tara#cancel',
                                as: :tara_cancel
+    get '/auth/failure', to: 'auth/tara#cancel'
     match '/auth/tara/create', via: [:post], to: 'auth/tara#create', as: :tara_create
   end
 
