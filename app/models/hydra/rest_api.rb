@@ -3,7 +3,7 @@ require 'json'
 class RestClient::ExceptionWithResponse
   def error
     body = JSON.parse(@response.body)
-    body['error_description'].empty? ? body['error'] : body['error_description']
+    body['error_description'].present? ? body['error'] : body['error_description']
   end
 end
 
