@@ -16,7 +16,6 @@ gem 'lhv', github: 'internetee/lhv', branch: 'master'
 gem 'mimemagic', '~> 0.4.3'
 gem 'money'
 
-gem 'omniauth'#, path: 'vendor/gems/omniauth'
 gem 'omniauth-rails_csrf_protection'
 
 gem 'omniauth-tara', github: 'internetee/omniauth-tara'
