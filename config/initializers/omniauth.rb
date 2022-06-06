@@ -32,6 +32,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     send_scope_to_token_endpoint: false,
     send_nonce: true,
     issuer: issuer,
+    discovery: true,
 
     client_options: {
       scheme: scheme,

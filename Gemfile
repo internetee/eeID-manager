@@ -15,9 +15,13 @@ gem 'kaminari'
 gem 'lhv', github: 'internetee/lhv', branch: 'master'
 gem 'mimemagic', '~> 0.4.3'
 gem 'money'
+
+gem 'omniauth'#, path: 'vendor/gems/omniauth'
 gem 'omniauth-rails_csrf_protection'
+
 gem 'omniauth-tara', github: 'internetee/omniauth-tara'
 # gem 'omniauth-tara', path: 'vendor/gems/omniauth-tara'
+
 gem 'pdfkit'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 5.6.0'
