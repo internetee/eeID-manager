@@ -48,8 +48,15 @@ end
 group :test do
   gem 'capybara', '>= 2.15'
   gem 'simplecov', require: false
+  gem 'spy'
   gem 'webdrivers'
   gem 'webmock'
 end
 
 gem "sidekiq", "~> 6.2"
+
+# token
+gem 'jwt'
+
+# account
+gem 'directo', github: 'internetee/directo', branch: 'master'
