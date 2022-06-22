@@ -55,9 +55,10 @@ class ServicesController < ApplicationController
           format.html { render :edit }
           format.json { render json: @service.errors, status: :unprocessable_entity }
         end
-      rescue RestClient::ExceptionWithResponse => e
+      rescue RestClient::Exception => e
+        e.error
         format.html do
-          flash.now[:notice] = e.error
+          flash.now[:notice] = e.message
           render :edit
         end
       end
