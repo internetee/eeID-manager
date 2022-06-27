@@ -1,6 +1,6 @@
 require 'rest-client'
 require 'json'
-class RestClient::ExceptionWithResponse
+class RestClient::Exception
   def error
     body = JSON.parse(@response.body)
     Rails.logger.info body

@@ -62,9 +62,9 @@ class User < ApplicationRecord
 
   def to_json_array_contact
     out = '['
-    out << "{\"name\": \"#{self.given_names}\","
-    out << "\"email\": \"#{self.email}\","
-    out << "\"phone\": \"#{self.mobile_phone}\","
+    out << "{\"name\": \"#{given_names}\","
+    out << "\"email\": \"#{email}\","
+    out << "\"phone\": \"#{mobile_phone}\","
     out << "\"department\": \"eeID\"},"
     out << ']'
   end

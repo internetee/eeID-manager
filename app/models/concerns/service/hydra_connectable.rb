@@ -15,6 +15,8 @@ module Concerns
       end
 
       def update_hydra_client
+        return unless hydra_client_present?
+
         API_CLIENT.update_client(regex_service_name, hydra_payload)
       end
 
@@ -31,6 +33,8 @@ module Concerns
       end
 
       def archive_hydra_client
+        return unless hydra_client_present?
+
         API_CLIENT.update_client_status(
           regex_service_name,
           'ARCHIVED'
@@ -45,6 +49,8 @@ module Concerns
       end
 
       def disapprove_hydra_client
+        return unless hydra_client_present?
+
         API_CLIENT.update_client_status(
           regex_service_name,
           'AWAITING_APPROVAL'
