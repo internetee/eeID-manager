@@ -41,16 +41,18 @@ module Admin
         when 'true'
           begin
             @service.approve!
-            format.html { redirect_to(admin_service_path(@service), notice: "Service successfully approved and binded!") }
-          rescue RestClient::ExceptionWithResponse => e
-            format.html { redirect_to(admin_service_path(@service), notice: e.error) }
+            format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully approved and binded!') }
+          rescue RestClient::Exception => e
+            e.error
+            format.html { redirect_to(admin_service_path(@service), notice: e.message) }
           end
         when 'false'
           begin
             @service.reject!
             format.html { redirect_to(admin_services_path, notice: 'Service successfully rejected!') }
-          rescue RestClient::ExceptionWithResponse => e
-            format.html { redirect_to(admin_services_path, notice: e.error) }
+          rescue RestClient::Exception => e
+            e.error
+            format.html { redirect_to(admin_services_path, notice: e.message) }
           end
         end
       end
@@ -63,15 +65,17 @@ module Admin
           begin
             @service.suspend!(no_credit: false)
             format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully suspended!') }
-          rescue RestClient::ExceptionWithResponse => e
-            format.html { redirect_to(admin_service_path(@service), notice: e.error) }
+          rescue RestClient::Exception => e
+            e.error
+            format.html { redirect_to(admin_service_path(@service), notice: e.message) }
           end
         when 'false'
           begin
             @service.unsuspend!
             format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully unsuspended!') }
-          rescue RestClient::ExceptionWithResponse => e
-            format.html { redirect_to(admin_service_path(@service), notice: e.error) }
+          rescue RestClient::Exception => e
+            e.error
+            format.html { redirect_to(admin_service_path(@service), notice: e.message) }
           rescue StandardError
             format.html { redirect_to(admin_service_path(@service), notice: 'Service cannot be unsuspended!') }
           end
