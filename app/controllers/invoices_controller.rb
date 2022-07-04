@@ -9,6 +9,9 @@ class InvoicesController < ApplicationController
     #                   iban: sepa_details[:billing_account_iban],
     #                   bic: sepa_details[:billing_account_bic],
     #                   bank: sepa_details[:billing_account_bank_name] }
+    Invoice.where(status: 'issued').each do |invoice|
+      EisBilling::SetInvoiceStatus.ping_status(invoice)
+    end
   end
 
   def create
@@ -17,9 +20,14 @@ class InvoicesController < ApplicationController
     if invoice.save
       invoice.reload
       @payment_order = PaymentOrder.new_from_invoice(invoice)
+      send_invoice_to_billing_system(invoice) if Feature.billing_system_integration_enabled?
       respond_to do |format|
         if @payment_order.save && @payment_order.reload
-          format.html { redirect_to @payment_order.linkpay_url }
+          if Feature.billing_system_integration_enabled?
+            format.html { redirect_to invoice.payment_link }
+          else
+            format.html { redirect_to @payment_order.linkpay_url }
+          end
           format.json { render :show, status: :created, location: @payment_order }
         else
           format.html { redirect_to invoices_path(@payment_order.invoice), notice: t(:error) }
@@ -37,6 +45,7 @@ class InvoicesController < ApplicationController
   # GET /invoices/aa450f1a-45e2-4f22-b2c3-f5f46b5f906b
   def show
     @invoice = current_user.invoices.find_by(uuid: params[:uuid])
+    EisBilling::SetInvoiceStatus.ping_status(@invoice)
   end
 
   def download
@@ -46,5 +55,15 @@ class InvoicesController < ApplicationController
     raw_pdf = pdf.to_pdf
 
     send_data(raw_pdf, filename: @invoice.filename)
+  end
+
+  private
+
+  def send_invoice_to_billing_system(invoice)
+    add_invoice_instance = EisBilling::Invoice.new(invoice)
+    result = add_invoice_instance.send_invoice
+    link = JSON.parse(result.body)['everypay_link']
+
+    invoice.update(payment_link: link)
   end
 end

@@ -49,6 +49,13 @@ group :test do
   gem 'simplecov', require: false
   gem 'webdrivers'
   gem 'webmock'
+  gem 'spy'
 end
 
 gem "sidekiq", "~> 6.2"
+
+# token
+gem 'jwt'
+
+# account
+gem 'directo', github: 'internetee/directo', branch: 'master'

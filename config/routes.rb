@@ -7,6 +7,11 @@ Rails.application.routes.draw do
   match 'api/v1/notify', via: :post, to: 'api/v1/notify#create'
   root to: 'dashboard#index'
 
+  namespace :eis_billing do
+    put '/payment_status', to: 'payment_status#update', as: 'payment_status'
+    put '/directo_response', to: 'directo_response#update', as: 'directo_response'
+  end
+
   concern :auditable do
     resources :versions, only: :index
   end

@@ -1,7 +1,6 @@
 require 'countries'
 
 class Invoice < ApplicationRecord
-
   alias_attribute :country_code, :alpha_two_country_code
   enum status: { issued: 'issued', paid: 'paid', cancelled: 'cancelled' }
   belongs_to :user, optional: true
@@ -15,7 +14,34 @@ class Invoice < ApplicationRecord
   validates :cents, numericality: { only_integer: true, greater_than: 0 }
   before_create :copy_billing_address_from_user
 
+  before_create :set_invoice_number
+
   scope :overdue, -> { where('due_date < ? AND status = ?', Time.zone.today, statuses[:issued]) }
+
+  def set_invoice_number
+    if Feature.billing_system_integration_enabled?
+      result = EisBilling::GetInvoiceNumber.send_invoice
+
+      if JSON.parse(result.body)['code'] == '403'
+        errors.add(:base, I18n.t('cannot get access'))
+        logger.error('PROBLEM WITH TOKEN')
+        throw(:abort)
+      end
+
+      if JSON.parse(result.body)['error'] == 'out of range'
+        errors.add(:base, I18n.t('failed_to_generate_invoice_invoice_number_limit_reached'))
+        logger.error('INVOICE NUMBER LIMIT REACHED, COULD NOT GENERATE INVOICE')
+        throw(:abort)
+      end
+
+      self.number = JSON.parse(result.body)['invoice_number'].to_i
+    end
+  end
+
+  def get_response_from_billing
+    response = EisBilling::GetInvoiceStatus.send_invoice(invoice_number: number)
+    JSON.parse(response.body, symbolize_names: true)
+  end
 
   def self.by_top_up_request(user:, cents:, psd2: true)
     inv = Invoice.new
@@ -108,5 +134,31 @@ class Invoice < ApplicationRecord
 
     BillingMailer.account_credited(user, self).deliver_later
     user.unsuspend_services!
+  end
+
+  def as_directo_json
+    invoice = ActiveSupport::JSON.decode(ActiveSupport::JSON.encode(self))
+    invoice['customer'] = compose_directo_customer
+    invoice['issue_date'] = issue_date.strftime('%Y-%m-%d')
+    invoice['transaction_date'] = paid_at&.strftime('%Y-%m-%d')
+    invoice['language'] = user.locale
+    invoice['invoice_lines'] = compose_directo_product
+
+    invoice
+  end
+
+  def compose_directo_product
+    [{ 'product_id' => 'ETTEM06', 'description' => "Order nr. #{number}",
+      'quantity' => 1, 'price' => ActionController::Base.helpers.number_with_precision(
+        price.to_s, precision: 2, separator: '.'
+      ) }].as_json
+  end
+
+  def compose_directo_customer
+    {
+      'code' => '',
+      'destination' => user.billing_alpha_two_country_code,
+      'vat_reg_no' => user.billing_vat_code
+    }.as_json
   end
 end
