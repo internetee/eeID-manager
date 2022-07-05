@@ -25,7 +25,6 @@
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.43.3",
     "sass-loader": "^13.0.0",
-    "style-loader": "^3.3.1",
     "turbolinks": "^5.2.0",
     "typeface-raleway": "^1.1.13",
     "url-loader": "^4.1.1"
@@ -45,11 +44,6 @@
     "Dinar Safiulin <dinar.safiulin@eestiinternet.ee>",
     "Sergei Tsõganov <sergei.tsoganov@eestiinternet.ee>"
   ],
-  "babel": {
-    "presets": [
-      "./node_modules/@rails/webpacker/package/babel/preset.js"
-    ]
-  },
   "devDependencies": {
     "karma": "^6.3.4",
     "karma-chrome-launcher": "^3.0.0",
