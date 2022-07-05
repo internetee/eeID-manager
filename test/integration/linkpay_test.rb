@@ -20,8 +20,9 @@ class LinkpayIntegrationTest < ActionDispatch::IntegrationTest
     get linkpay_callback_path(params: callback_params)
     perform_enqueued_jobs
 
-    assert_equal(@payment_order.reload.response['payment_reference'], callback_params['payment_reference'])
-    assert_equal(@payment_order.reload.response['type'], 'trusted_data')
+    @payment_order.reload
+    assert_equal(@payment_order.response['payment_reference'], callback_params['payment_reference'])
+    assert_equal(@payment_order.response['type'], 'trusted_data')
     assert @payment_order.paid?
     assert @invoice.reload.paid?
   end
@@ -32,8 +33,9 @@ class LinkpayIntegrationTest < ActionDispatch::IntegrationTest
     get linkpay_callback_path(params: callback_params)
     perform_enqueued_jobs
 
-    assert_equal(@payment_order.reload.response['payment_reference'], callback_params['payment_reference'])
-    refute @payment_order.reload.response['type']
+    @payment_order.reload
+    assert_equal(@payment_order.response['payment_reference'], callback_params['payment_reference'])
+    refute @payment_order.response['type']
     refute @payment_order.paid?
     refute @invoice.reload.paid?
   end
