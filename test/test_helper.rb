@@ -11,6 +11,7 @@ require 'minitest/mock'
 require 'capybara/rails'
 require 'capybara/minitest'
 require 'webmock/minitest'
+require 'support/message_delivery'
 
 class ActiveSupport::TestCase
   WebMock.disable_net_connect!(allow_localhost: true, allow: 'chromedriver.storage.googleapis.com')

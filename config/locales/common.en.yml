@@ -2,13 +2,13 @@ en:
   common:
     header:
       open_portal: "Public portal"
-      eid_portal: "eID portal"
+      eid_portal: "eeID portal"
       registrar_portal_url_html: '<a href= "https://www.internet.ee/registrar-portal"><span>Registrar portal</span></a>'
       registrant_portal: "Registrant portal"
       auction_portal: "Auction portal"
 
     footer:
-      copyright: "© 2019 Estonian Internet Foundation"
+      copyright: "© 2022 Estonian Internet Foundation"
       address: "Paldiski mnt 80, 10617 Tallinn, Estonia"
       registration_code: "Registration code: 90010019"
 

@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'expected_payment_order'
 
 class PaymentOrderTest < ActiveSupport::TestCase
   def setup
@@ -28,10 +27,6 @@ class PaymentOrderTest < ActiveSupport::TestCase
     assert_equal ['PaymentOrders::Psd2', 'PaymentOrders::Sepa'], PaymentOrder::ENABLED_METHODS
   end
 
-  def test_supported_method_returns_true_or_false
-    assert PaymentOrder.supported_method?(PaymentOrders::Psd2)
-  end
-
   def test_payment_method_must_be_supported_for_the_object_to_be_valid
     payment_order = PaymentOrder.new
 
@@ -52,13 +47,18 @@ class PaymentOrderTest < ActiveSupport::TestCase
     assert payment_psd2_order.invoices.include? @payable_invoice
   end
 
-  def test_payment_order_channel
-    assert_equal @payment_order.channel, 'Psd2'
+  def test_new_from_paid_invoice
+    paid_invoice = @payable_invoice
+    paid_invoice.paid_at = Time.now
+    paid_invoice.paid!
+    payment_order = PaymentOrder.new_from_invoice(paid_invoice)
+
+    assert_equal payment_order.type, 'PaymentOrders::Psd2'
+    assert payment_order.invoices.include? paid_invoice
+    refute payment_order.valid?
   end
 
-  def test_supported_methods
-    enabled_payment_methods = PaymentOrder.supported_methods
-    assert enabled_payment_methods.include? PaymentOrders::Psd2
-    assert enabled_payment_methods.include? PaymentOrders::Sepa
+  def test_payment_order_channel
+    assert_equal @payment_order.channel, 'Psd2'
   end
 end

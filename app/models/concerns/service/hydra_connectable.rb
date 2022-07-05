@@ -15,8 +15,6 @@ module Concerns
       end
 
       def update_hydra_client
-        return unless hydra_client_present?
-
         API_CLIENT.update_client(regex_service_name, hydra_payload)
       end
 
@@ -97,6 +95,11 @@ module Concerns
             },
           },
         }.to_json
+      end
+
+      def check_hydra_client
+        update_hydra_client if approved?
+        disapprove_hydra_client unless approved?
       end
     end
   end

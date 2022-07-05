@@ -6,35 +6,20 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy]
   before_action :set_minimum_password_length, only: %i[new edit]
 
-  # GET /users
-  def index; end
-
   # GET /users/new
   def new
     redirect_to user_path(current_user.uuid), notice: t('.already_signed_in') if current_user
     @user = User.new
   end
 
-  # GET /profile/edit
-  def edit_authwall
-    redirect_to edit_user_path(current_user.uuid)
-  end
-
   # POST /users/new
   def create
     @user = User.new(create_params)
-
     respond_to do |format|
       if @user.save
-        format.html do
-          sign_in(User, @user)
-          redirect_to user_path(@user.uuid), notice: t(:created)
-        end
-
-        format.json do
-          sign_in(User, @user)
-          render :show, status: :created, location: @user
-        end
+        sign_in(User, @user)
+        format.html { redirect_to user_path(@user.uuid), notice: t(:created) }
+        format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
@@ -53,11 +38,9 @@ class UsersController < ApplicationController
     if valid_password?
       @user.attributes = params_for_update
       email_changed = @user.email_changed?
-
       respond_to do |format|
         if @user.valid?
           @user.save!
-
           format.html do
             redirect_to user_path(@user.uuid), notice: notification_for_update(email_changed)
           end
@@ -75,7 +58,7 @@ class UsersController < ApplicationController
   def destroy
     respond_to do |format|
       if @user.deletable? && @user.destroy!
-        format.html { redirect_to :root, notice: notification_for_delete(@user) }
+        format.html { redirect_to new_user_session_path, notice: notification_for_delete(@user) }
       else
         format.html { redirect_to user_path(@user.uuid), notice: notification_for_delete(@user) }
       end

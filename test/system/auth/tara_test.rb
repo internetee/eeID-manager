@@ -8,6 +8,7 @@ class TaraTest < ApplicationSystemTestCase
     ActionMailer::Base.deliveries.clear
 
     OmniAuth.config.test_mode = true
+
     @user = users(:signed_in_with_omniauth)
 
     @existing_user_hash = {
@@ -40,9 +41,9 @@ class TaraTest < ApplicationSystemTestCase
       click_link('Sign in')
     end
 
-    user_uid = find("#user_uid", visible: :all)
-    user_last_name = find("#user_surname", visible: :all)
-    user_first_name = find("#user_given_names", visible: :all)
+    user_uid = find('#user_uid', visible: :all)
+    user_last_name = find('#user_surname', visible: :all)
+    user_first_name = find('#user_given_names', visible: :all)
 
     assert_equal user_uid.value, @new_user_hash['uid']
     assert_equal user_first_name.value, @new_user_hash['info']['first_name']
@@ -67,6 +68,41 @@ class TaraTest < ApplicationSystemTestCase
     assert_equal(['tere@test.ee'], last_email.to)
 
     assert has_current_path? new_user_session_path
+  end
+
+  def test_create_new_account_with_tara_with_errors
+    OmniAuth.config.mock_auth[:tara] = OmniAuth::AuthHash.new(@new_user_hash)
+
+    visit root_path
+
+    within('#tara-sign-in') do
+      click_link('Sign in')
+    end
+
+    user_uid = find('#user_uid', visible: :all)
+    user_last_name = find('#user_surname', visible: :all)
+    user_first_name = find('#user_given_names', visible: :all)
+
+    assert_equal user_uid.value, @new_user_hash['uid']
+    assert_equal user_first_name.value, @new_user_hash['info']['first_name']
+    assert_equal user_last_name.value, @new_user_hash['info']['last_name']
+
+    fill_in 'Email', with: ''
+    fill_in 'Mobile phone', with: '+37256677889'
+    fill_in 'Billed to', with: 'John Joe'
+    fill_in 'VAT code', with: '112233445566'
+    fill_in 'Street', with: 'Bakery street'
+    fill_in 'City', with: 'Tartu'
+    fill_in 'Postal code', with: '13001'
+
+    check_checkbox('user[accepts_terms_and_conditions]')
+
+    assert_no_difference -> { User.count } do
+      click_link_or_button 'Sign up'
+    end
+
+    assert_text 'Errors'
+    assert_current_path '/auth/tara/create'
   end
 
   def test_existing_user_gets_signed_in

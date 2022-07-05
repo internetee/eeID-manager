@@ -3,7 +3,7 @@ require 'test_helper'
 class ServiceTest < ActiveSupport::TestCase
   def setup
     @service = services(:one)
-    stub_request(:any, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
+    # stub_request(:any, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
   end
 
   def teardown
@@ -56,6 +56,8 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_reject_service
+    stub_request(:delete, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
+    stub_request(:get, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
     @service.reject!
 
     assert @service.rejected?
@@ -65,7 +67,20 @@ class ServiceTest < ActiveSupport::TestCase
     assert_match @service.name, last_email.subject
   end
 
+  def test_approve_new_service
+    stub_request(:get, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
+      .to_return({ status: 401 })
+    stub_request(:put, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
+    stub_request(:post, "#{API_ENDPOINT}/clients")
+    @service.approved = false
+    @service.approve!
+
+    last_email = ActionMailer::Base.deliveries.last
+    assert_match @service.name, last_email.subject
+  end
+
   def test_suspend_service
+    stub_request(:patch, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
     @service.approved = false
     @service.suspend!(no_credit: false)
 
@@ -76,6 +91,7 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_unsuspend_service
+    stub_request(:put, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
     @service.suspended = true
     @service.unsuspend!
     refute @service.suspended?
@@ -91,6 +107,8 @@ class ServiceTest < ActiveSupport::TestCase
   end
 
   def test_archive_service
+    stub_request(:get, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
+    stub_request(:patch, "#{API_ENDPOINT}/clients/#{@service.regex_service_name}")
     assert @service.client_id.present?
     @service.archive!
     assert @service.archived?

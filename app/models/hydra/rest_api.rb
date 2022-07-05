@@ -1,13 +1,5 @@
 require 'rest-client'
 require 'json'
-class RestClient::Exception
-  def error
-    body = JSON.parse(@response.body)
-    Rails.logger.info body
-    body['error_description'].present? ? body['error'] : body['error_description']
-  end
-end
-
 module Hydra
   class RestApi
     @api_endpoint = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)

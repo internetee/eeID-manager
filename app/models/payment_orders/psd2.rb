@@ -10,9 +10,9 @@ module PaymentOrders
 
     SUCCESSFUL_PAYMENT = %w[settled authorized].freeze
 
-    def self.config_namespace_name
-      CONFIG_NAMESPACE
-    end
+    # def self.config_namespace_name
+    #   CONFIG_NAMESPACE
+    # end
 
     # Perform necessary checks and mark the invoice as paid
     def mark_invoice_as_paid

@@ -68,6 +68,7 @@ default: &default
     redirect_uri: 'http://localhost:3000/auth/tara/callback'
     ory_hydra_private: 'http://hydra:4445'
     scope: ['openid', 'idcard', 'mid', 'smartid', 'eidas']
+    discovery: false
     keys: 
       use: sig
       kty: RSA

@@ -2,7 +2,7 @@ require 'identity_code'
 require 'countries'
 class User < ApplicationRecord
   CUSTOMER_ROLE = 'customer'.freeze
-  ADMINISTATOR_ROLE = 'administrator'.freeze
+  ADMINISTRATOR_ROLE = 'administrator'.freeze
   ROLES = %w[administrator customer].freeze
   ESTONIAN_COUNTRY_CODE = 'EE'.freeze
   TARA_PROVIDER = 'tara'.freeze
@@ -26,10 +26,10 @@ class User < ApplicationRecord
   validate :customer_must_accept_terms_and_conditions
   has_many :payment_orders, dependent: :nullify
   has_many :invoices, dependent: :nullify
-  has_many :services
+  has_many :services, dependent: :destroy
   has_many :authentications, through: :services
-  has_many :transactions
-  has_many :contacts
+  has_many :transactions, dependent: :destroy
+  has_many :contacts, dependent: :destroy
 
   def suspend_services!(no_credit: true)
     services.each { |s| s.suspend!(no_credit: no_credit) }
@@ -38,7 +38,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    role?(ADMINISTATOR_ROLE)
+    role?(ADMINISTRATOR_ROLE)
   end
 
   def balance_critical!
@@ -58,15 +58,6 @@ class User < ApplicationRecord
     return BigDecimal('0') if billing_vat_code.present?
 
     Countries.vat_rate_from_alpha2_code(country_code)
-  end
-
-  def to_json_array_contact
-    out = '['
-    out << "{\"name\": \"#{given_names}\","
-    out << "\"email\": \"#{email}\","
-    out << "\"phone\": \"#{mobile_phone}\","
-    out << "\"department\": \"eeID\"},"
-    out << ']'
   end
 
   def identity_code_must_be_valid_for_estonia

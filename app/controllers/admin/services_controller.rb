@@ -15,14 +15,7 @@ module Admin
       @user = @service.user
       @hydra_client = @service.find_hydra_client
       @hydra_client_present = !@hydra_client.nil?
-      respond_to do |format|
-        format.html
-        format.xlsx {
-          response.headers[
-            'Content-Disposition'
-          ] = "attachment; filename=client_#{@service.id}.xlsx"
-        }
-      end
+      @service.disapprove! if @service.approved? && @hydra_client.nil?
     end
 
     def edit; end
@@ -42,16 +35,16 @@ module Admin
           begin
             @service.approve!
             format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully approved and binded!') }
-          rescue RestClient::Exception => e
-            e.error
+          rescue RestClient::ExceptionWithResponse => e
+            Rails.logger.info e.response.body
             format.html { redirect_to(admin_service_path(@service), notice: e.message) }
           end
         when 'false'
           begin
             @service.reject!
             format.html { redirect_to(admin_services_path, notice: 'Service successfully rejected!') }
-          rescue RestClient::Exception => e
-            e.error
+          rescue RestClient::ExceptionWithResponse => e
+            Rails.logger.info e.response.body
             format.html { redirect_to(admin_services_path, notice: e.message) }
           end
         end
@@ -65,18 +58,19 @@ module Admin
           begin
             @service.suspend!(no_credit: false)
             format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully suspended!') }
-          rescue RestClient::Exception => e
-            e.error
+          rescue RestClient::ExceptionWithResponse => e
+            Rails.logger.info e.response.body
             format.html { redirect_to(admin_service_path(@service), notice: e.message) }
           end
         when 'false'
           begin
             @service.unsuspend!
             format.html { redirect_to(admin_service_path(@service), notice: 'Service successfully unsuspended!') }
-          rescue RestClient::Exception => e
-            e.error
+          rescue RestClient::ExceptionWithResponse => e
+            Rails.logger.info e.response.body
             format.html { redirect_to(admin_service_path(@service), notice: e.message) }
-          rescue StandardError
+          rescue StandardError => e
+            Rails.logger.info e
             format.html { redirect_to(admin_service_path(@service), notice: 'Service cannot be unsuspended!') }
           end
         end
@@ -85,17 +79,6 @@ module Admin
 
     def set_service
       @service = Service.unarchived.find(params[:id])
-    end
-
-    def services_params
-      params.require(:service).permit(:name, :short_description, :user_id, :callback_url, :approval_description, :id)
-    end
-
-    private
-
-    def search_params
-      search_params_copy = params.dup
-      search_params_copy.permit(:domain_name)
     end
   end
 end

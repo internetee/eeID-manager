@@ -61,11 +61,9 @@ class Orderable
 
   # Returning an array in all cases is useful for downstream interfaces.
   def model_columns
-    if model
-      model.column_names
-    else
-      []
-    end
+    return [] unless model
+
+    model.column_names
   end
 
   def model_is_orderable

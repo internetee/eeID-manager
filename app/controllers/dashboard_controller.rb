@@ -9,7 +9,7 @@ class DashboardController < ApplicationController
   end
 
   def redirect_admin
-    return unless current_user.role?(User::ADMINISTATOR_ROLE)
+    return unless current_user.admin?
 
     redirect_to admin_authentications_path
   end

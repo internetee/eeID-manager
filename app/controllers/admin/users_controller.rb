@@ -4,12 +4,7 @@ module Admin
   class UsersController < BaseController
     include OrderableHelper
 
-    before_action :set_user, except: %i[index new create search]
-
-    # GET /admin/users/new
-    def new
-      @user = User.new
-    end
+    before_action :set_user, except: %i[index search]
 
     # GET /admin/users
     def index
@@ -43,7 +38,7 @@ module Admin
     # PUT /admin/users/1
     def update
       respond_to do |format|
-        if @user.update!(update_params)
+        if @user.update(update_params)
           format.html { redirect_to(admin_user_path(@user)) }
           format.json { render(:show, status: :ok, location: admin_user_path(@user)) }
         else
@@ -69,14 +64,6 @@ module Admin
       search_params_copy.permit(:search_string, order: :origin)
     end
 
-    def create_params
-      params.require(:user)
-            .permit(:email, :password, :password_confirmation, :country_code, :given_names,
-                    :surname, :mobile_phone, :billing_zip, :accepts_terms_and_conditions,
-                    :billing_recipient, :billing_city, :billing_vat_code, :billing_street,
-                    :billing_alpha_two_country_code, roles: [])
-    end
-
     def update_params
       update_params = params.require(:user)
                             .permit(:email, :password, :password_confirmation, :country_code,
@@ -86,10 +73,6 @@ module Admin
                                     :billing_alpha_two_country_code, roles: [])
       update_params.reject! { |_k, v| v.empty? }
       merge_updated_by(update_params)
-    end
-
-    def authorize_user
-      authorize!(:manage, User)
     end
 
     def set_user

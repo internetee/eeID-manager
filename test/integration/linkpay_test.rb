@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Psd2Test < ActiveSupport::TestCase
+class LinkpayIntegrationTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper
 
   CONFIG_NAMESPACE = 'psd2'.freeze
@@ -9,28 +9,40 @@ class Psd2Test < ActiveSupport::TestCase
 
   USER = Setting.fetch(:payment_methods, CONFIG_NAMESPACE.to_sym, :user)
 
-  def setup
+  setup do
     @payment_order = payment_orders(:issued)
     @invoice = @payment_order.invoices.first
+    @url = "#{LINKPAY_CHECK_PREFIX}#{callback_params['payment_reference']}?api_username=#{USER}"
   end
 
-  def test_marks_invoice_as_paid_successfully
-    @payment_order.update(response: callback_params)
-    url = "#{LINKPAY_CHECK_PREFIX}#{callback_params['payment_reference']}?api_username=#{USER}"
-    stub_request(:get, url).to_return(status: 200, body: every_pay_payment_outcome_response)
+  def test_callback
+    stub_request(:get, @url).to_return(status: 200, body: every_pay_payment_outcome_response)
+    get linkpay_callback_path(params: callback_params)
+    perform_enqueued_jobs
 
-    body = JSON.parse(every_pay_payment_outcome_response).with_indifferent_access
-    @payment_order.response = body.merge(type: 'trusted_data', timestamp: Time.zone.now)
-    @payment_order.mark_invoice_as_paid
-    @invoice.reload
+    assert_equal(@payment_order.reload.response['payment_reference'], callback_params['payment_reference'])
+    assert_equal(@payment_order.reload.response['type'], 'trusted_data')
     assert @payment_order.paid?
-    assert @invoice.paid?
+    assert @invoice.reload.paid?
   end
+
+  def test_callback_with_standard_error
+    stub_request(:get, @url).to_raise(StandardError)
+
+    get linkpay_callback_path(params: callback_params)
+    perform_enqueued_jobs
+
+    assert_equal(@payment_order.reload.response['payment_reference'], callback_params['payment_reference'])
+    refute @payment_order.reload.response['type']
+    refute @payment_order.paid?
+    refute @invoice.reload.paid?
+  end
+
   # rubocop:disable all
   def callback_params
     {
-      "order_reference"=>@invoice.number,
-      "payment_reference"=>"1b1ee0cad31038ab000ddd0f021487711d88db9418a3ca53672e223337037c7d"
+      'order_reference' => 'cec1de76-164f-4c9a-922d-dacde5e99f99',
+      'payment_reference' => '1b1ee0cad31038ab000ddd0f021487711d88db9418a3ca53672e223337037c7d',
     }
   end
 

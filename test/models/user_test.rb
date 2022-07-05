@@ -42,6 +42,19 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(["can't be blank"], user.errors[:billing_alpha_two_country_code])
   end
 
+  def test_vat_rate_if_not_estonian_and_billing_vat_code_present
+    @user.country_code = 'PL'
+    assert @user.valid?
+    assert_equal(@user.vat_rate, 0.0)
+  end
+
+  def test_vat_rate_if_not_estonian_and_billing_vat_code_not_present
+    @user.country_code = 'PL'
+    @user.billing_vat_code = ''
+    assert @user.valid?
+    assert_equal(@user.vat_rate, Countries.vat_rate_from_alpha2_code(@user.country_code))
+  end
+
   def test_identity_code_can_be_empty_if_not_estonian
     @user.country_code = 'PL'
     @user.identity_code = nil
@@ -133,7 +146,7 @@ class UserTest < ActiveSupport::TestCase
   def test_has_default_role
     assert_equal [User::CUSTOMER_ROLE], @user.roles
     assert @user.role?(User::CUSTOMER_ROLE)
-    refute @user.role?(User::ADMINISTATOR_ROLE)
+    refute @user.role?(User::ADMINISTRATOR_ROLE)
   end
 
   def test_admin_scope

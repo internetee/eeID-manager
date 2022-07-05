@@ -14,6 +14,6 @@ administrator = User.new(given_names: 'Default', surname: 'Administrator',
                          billing_recipient: 'Admin', billing_street: 'Street',
                          billing_city: 'Tallinn', billing_zip: '12345',
                          billing_alpha_two_country_code: 'EE',
-                         roles: [User::ADMINISTATOR_ROLE], accepts_terms_and_conditions: true)
+                         roles: [User::ADMINISTRATOR_ROLE], accepts_terms_and_conditions: true)
 administrator.skip_confirmation!
 administrator.save!

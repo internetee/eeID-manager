@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DashboardsTest < ActionDispatch::IntegrationTest
+class DashboardIntegrationTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   def test_redirect_to_admin_authentications

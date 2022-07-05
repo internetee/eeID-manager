@@ -4,20 +4,25 @@ class ServicesTest < ApplicationSystemTestCase
   def setup
     super
     @user = users(:customer)
-    @service = services(:one)
+    @service_one = services(:one)
     sign_in @user
   end
 
-  def test_visit_authentication_page
-    visit_authentication_page
+  def test_visit_services_page
+    visit_services_page
   end
 
   def test_create_new_service
     create_new_service
   end
 
+  def test_create_new_service_without_user_main_contact
+    @user.contacts.destroy_all
+    create_new_service
+  end
+
   def test_raise_error_during_creating_new_service
-    visit_authentication_page
+    visit_services_page
     redirect_to_create_new_service
 
     fill_in 'service_name', with: 'Test service'
@@ -35,7 +40,7 @@ class ServicesTest < ApplicationSystemTestCase
     stub_request(:any, /#{API_ENDPOINT}.*/)
 
     create_new_service
-    visit_authentication_page
+    visit_services_page
 
     assert_text 'Test service'
     click_link 'Test service'
@@ -47,14 +52,31 @@ class ServicesTest < ApplicationSystemTestCase
     assert_text 'Awesome service'
   end
 
+  def test_update_active_service_with_no_hydra_client
+    stub_put_hydra_client_not_ok
+
+    visit edit_service_path(@service_one)
+
+    fill_in 'service_name', with: 'Awesome service'
+    click_on 'Update'
+    assert_text '404 Not Found'
+  end
+
+  def test_update_active_service_with_no_hydra_server_connection
+    stub_put_hydra_client_with_socket_error
+
+    visit edit_service_path(@service_one)
+
+    fill_in 'service_name', with: 'Awesome service'
+    click_on 'Update'
+    assert_text 'Failed to open TCP connection to hydra'
+    assert_current_path root_path
+  end
+
   def test_update_approved_service_not_important_attributes
     stub_request(:any, /#{API_ENDPOINT}.*/)
 
-    visit services_path
-    assert_text 'One'
-    assert_text 'ACTIVE'
-    click_link 'One'
-    click_link 'Edit service details'
+    visit edit_service_path(@service_one)
 
     fill_in 'service_name', with: 'Awesome service'
     click_on 'Update'
@@ -66,12 +88,7 @@ class ServicesTest < ApplicationSystemTestCase
   def test_update_approved_service_important_attributes
     stub_request(:any, /#{API_ENDPOINT}.*/)
 
-    visit services_path
-
-    assert_text 'One'
-    assert_text 'ACTIVE'
-    click_link 'One'
-    click_link 'Edit service details'
+    visit edit_service_path(@service_one)
 
     fill_in 'service_callback_url', with: 'https://another_callback_url'
     click_on 'Update'
@@ -83,7 +100,7 @@ class ServicesTest < ApplicationSystemTestCase
 
   def test_raise_error_during_update_service
     create_new_service
-    visit_authentication_page
+    visit_services_page
 
     assert_text 'Test service'
     click_link 'Test service'
@@ -100,7 +117,7 @@ class ServicesTest < ApplicationSystemTestCase
     stub_request(:any, /#{API_ENDPOINT}.*/)
 
     create_new_service
-    visit_authentication_page
+    visit_services_page
 
     assert_text 'Test service'
     click_link 'Test service'
@@ -114,14 +131,14 @@ class ServicesTest < ApplicationSystemTestCase
   private
 
   def create_new_service
-    visit_authentication_page
+    visit_services_page
     redirect_to_create_new_service
     fill_in_fields_and_create_new_service
   end
 
-  def visit_authentication_page
+  def visit_services_page
     visit services_path
-    assert_text 'Your eID Services'
+    assert_text 'Your eeID Services'
     assert page.has_css?('.ui.table.unstackable.fixed')
   end
 
