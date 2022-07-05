@@ -2,7 +2,7 @@ require 'countries'
 
 class UsersController < ApplicationController
   include Concerns::UserNotices
-  before_action :authenticate_user!, only: %i[show edit update destroy edit_authwall]
+  before_action :authenticate_user!, only: %i[show edit update destroy]
   before_action :set_user, only: %i[show edit update destroy]
   before_action :set_minimum_password_length, only: %i[new edit]
 

@@ -13,9 +13,9 @@ class InvoicesController < ApplicationController
     invoice = Invoice.by_top_up_request(user: current_user, cents: amount)
     if invoice.save
       payment_order = PaymentOrder.new_from_invoice(invoice.reload)
-      payment_order.save!
+      payment_order.save! && payment_order.reload
       respond_to do |format|
-        format.html { redirect_to payment_order.reload.linkpay_url }
+        format.html { redirect_to URI.parse(payment_order.linkpay_url).to_s }
         format.json { render :show, status: :created, location: payment_order }
       end
     else
