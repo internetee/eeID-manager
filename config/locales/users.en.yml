@@ -18,7 +18,7 @@ en:
     current_password: "Current password"
     remember_me: "Remember me"
     i_accept_terms_and_conditions_html: "I have read and agree with %{link}."
-    terms_and_conditions_link: "eID Portal user agreement"
+    terms_and_conditions_link: "eeID Portal user agreement"
     email_changed: >-
       Confirmation link was sent to new email address. Please confirm the address for the change to
       take an effect!

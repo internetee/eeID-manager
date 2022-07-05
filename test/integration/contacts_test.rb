@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ContactsTest < ActionDispatch::IntegrationTest
+class ContactsIntegrationTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
 
   API_ENDPOINT = EidManager::Application.config.customization.dig(:tara, :ory_hydra_private)
@@ -11,7 +11,7 @@ class ContactsTest < ActionDispatch::IntegrationTest
     stub_request(:any, /#{API_ENDPOINT}.*/)
   end
 
-  def test_test_forbidding_destroy_contact_used_by_service
+  def test_forbidding_destroy_contact_used_by_service
     assert_equal @user.contacts.count, 2
 
     contact = contacts(:john)

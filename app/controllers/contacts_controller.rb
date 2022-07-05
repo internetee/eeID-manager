@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :authenticate_user!, only: %i[show edit update destroy edit_authwall]
+  before_action :authenticate_user!, only: %i[show edit update destroy]
   before_action :set_contact, only: %i[show edit update destroy]
 
   def index
@@ -45,14 +45,14 @@ class ContactsController < ApplicationController
     respond_to do |format|
       if @contact.destroy_enabled? && @contact.destroy
         format.html { redirect_to contacts_url, notice: 'Contact was successfully destroyed.' }
-        format.json { head :no_content }
       else
         format.html do
-          redirect_to contacts_url,
-                      notice: "The contact #{@contact.name} is used by the next services: #{@contact.service_list}"
+          service_list = @contact.service_list
+          notice = "The contact #{@contact.name} is used by the next services: #{service_list}"
+          redirect_to contacts_url, notice: notice
         end
-        format.html { render :show }
       end
+      format.json { head :no_content }
     end
   end
 

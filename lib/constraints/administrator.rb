@@ -4,12 +4,9 @@ module Constraints
 
     def matches?(request)
       user = request.env['warden']&.user(:user)
+      return false unless user
 
-      if user
-        user.roles.include?(User::ADMINISTATOR_ROLE)
-      else
-        false
-      end
+      user.admin?
     end
   end
 end

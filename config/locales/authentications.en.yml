@@ -7,7 +7,7 @@ en:
     price: "price"
 
     index:
-      title: "eID Authentications"
+      title: "eeID Authentications"
       search: "Search by domain name"
       auction_list_tooltip: "Send me daily auctioned domain list by email"
       auction_list_unsubscribe_tooltip: "Unsubscribe me from daily auctioned domain lists"

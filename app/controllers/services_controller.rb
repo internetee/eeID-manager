@@ -2,14 +2,11 @@ class ServicesController < ApplicationController
   include ServicesHelper
   include OrderableHelper
   before_action :authenticate_user!
-  skip_before_action :verify_authenticity_token, only: [:cors_preflight_check]
   before_action :set_service, only: %i[show edit update destroy]
   before_action :service_params, :set_default_email, only: %i[update]
   before_action :create_main_contact, only: %i[new]
 
   def index
-    set_cors_header
-
     @services = current_user.services.unarchived.page(params[:page])
   end
 
@@ -44,23 +41,22 @@ class ServicesController < ApplicationController
     disapprove if attributes_changed? && @service.approved?
     @service.assign_attributes(@service_params)
     respond_to do |format|
-      begin
-        if @service.valid?
-          @service.update_hydra_client
-          @service.disapprove_hydra_client unless @service.approved?
-          @service.save
-          format.html { redirect_to @service, notice: 'Service was successfully updated.' }
-          format.json { render :show, status: :ok, location: @service }
-        else
-          format.html { render :edit }
-          format.json { render json: @service.errors, status: :unprocessable_entity }
-        end
-      rescue RestClient::Exception => e
-        e.error
-        format.html do
-          flash.now[:notice] = e.message
-          render :edit
-        end
+      if @service.valid?
+        @service.save!
+        @service.check_hydra_client
+        format.html { redirect_to @service, notice: 'Service was successfully updated.' }
+        format.json { render :show, status: :ok, location: @service }
+      else
+        format.html { render :edit }
+        format.json { render json: @service.errors, status: :unprocessable_entity }
+      end
+    end
+  rescue RestClient::ExceptionWithResponse => e
+    Rails.logger.info e.response.body
+    respond_to do |format|
+      format.html do
+        flash.now[:notice] = e.message
+        render :edit
       end
     end
   end
@@ -89,34 +85,10 @@ class ServicesController < ApplicationController
                                                         :rejected, :archived, auth_methods: [])
   end
 
-  def cors_preflight_check
-    set_access_control_headers
-
-    render plain: ''
-  end
-
   private
 
   def set_service
     @service = current_user.services.find(params[:id])
-  end
-
-  def search_params
-    search_params_copy = params.dup
-    search_params_copy.permit(:domain_name)
-  end
-
-  def set_cors_header
-    response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
-  end
-
-  def set_access_control_headers
-    response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
-    response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, ' \
-                                                       'Authorization, Token, Auth-Token, '\
-                                                       'Email, X-User-Token, X-User-Email'
-    response.headers['Access-Control-Max-Age'] = '3600'
   end
 
   def set_default_email

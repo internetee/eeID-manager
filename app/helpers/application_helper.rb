@@ -1,11 +1,7 @@
 module ApplicationHelper
-  def application_name
-    Rails.configuration.customization['application_name']
-  end
-
   def navigation_links(current_user)
     content_tag(:ul) do
-      if current_user&.role?(User::ADMINISTATOR_ROLE)
+      if current_user&.admin?
         links(administrator_link_list)
       elsif current_user&.role?(User::CUSTOMER_ROLE)
         links(user_link_list)

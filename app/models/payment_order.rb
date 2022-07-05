@@ -1,4 +1,4 @@
-require 'expected_payment_order'
+# require 'expected_payment_order'
 
 class PaymentOrder < ApplicationRecord
   include Concerns::PaymentOrder::Linkpayable
@@ -23,8 +23,6 @@ class PaymentOrder < ApplicationRecord
   has_many :invoices, through: :invoice_payment_orders
   belongs_to :user, optional: true
 
-  attr_accessor :return_url, :callback_url
-
   def self.new_from_invoice(invoice, psd2: true)
     payment_type = psd2 ? 'PaymentOrders::Psd2' : 'PaymentOrders::Sepa'
     payment_order = PaymentOrder.new(user: invoice.user, invoice_id: invoice.id,
@@ -42,32 +40,22 @@ class PaymentOrder < ApplicationRecord
     errors.add(:invoice, 'is already paid')
   end
 
-  def self.supported_method?(some_class)
-    raise(Errors::ExpectedPaymentOrder, some_class) unless some_class < PaymentOrder
-
-    if ENABLED_METHODS.include?(some_class.name)
-      true
-    else
-      false
-    end
-  end
-
   def channel
     type.gsub('PaymentOrders::', '')
   end
 
-  def self.supported_methods
-    enabled = []
+  # def self.supported_methods
+  #   enabled = []
 
-    ENABLED_METHODS.each do |method|
-      class_name = method.constantize
-      raise(Errors::ExpectedPaymentOrder, class_name) unless class_name < PaymentOrder
+  #   ENABLED_METHODS.each do |method|
+  #     class_name = method.constantize
+  #     raise(Errors::ExpectedPaymentOrder, class_name) unless class_name < PaymentOrder
 
-      enabled << class_name
-    end
+  #     enabled << class_name
+  #   end
 
-    enabled
-  end
+  #   enabled
+  # end
 
   def check_linkpay_status
     return if paid?
@@ -79,5 +67,4 @@ class PaymentOrder < ApplicationRecord
     update(response: body.merge(type: TRUSTED_DATA, timestamp: Time.zone.now))
     mark_invoice_as_paid
   end
-
 end

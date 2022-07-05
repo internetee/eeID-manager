@@ -24,7 +24,7 @@ identification service eeID."
 
     index:
       default_user: "Default_user"
-      title: "Your eID Services"
+      title: "Your eeID Services"
       search: "Search by domain name"
       auction_list_tooltip: "Send me daily auctioned domain list by email"
       auction_list_unsubscribe_tooltip: "Unsubscribe me from daily auctioned domain lists"

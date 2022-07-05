@@ -226,10 +226,10 @@
                                             <div style="font-family:'Montserrat',Arial,sans-serif;font-size:16px;line-height:22px;text-align:left;color:#555;">
                                                 Hello, <%= @resource.display_name %>!<br><br>
                                                 <% if @resource.try(:unconfirmed_email?) %>
-                                                We're just letting you know that your email address was successfully changed to <b><%= @resource.unconfirmed_email)%></b>.
+                                                We're just letting you know that your email address was successfully changed to <b><%= @resource.unconfirmed_email %></b>.
                                                 If this wasn't you, please contact us immediately.
                                                 <% else %>
-                                                We're just letting you know that your email address was successfully changed to <b><%= @resource.email)%></b>.
+                                                We're just letting you know that your email address was successfully changed to <b><%= @resource.email %></b>.
                                                 If this wasn't you, please contact us immediately.
                                                 <% end %>
                                                 <br><br>

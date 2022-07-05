@@ -2,29 +2,21 @@ class InvoicesController < ApplicationController
   before_action :authenticate_user!
   # GET /invoices
   def index
-    @transactions = current_user.transactions.order(created_at: :desc).all.page(params[:transactions_page]).per(5)
-    @invoices = current_user.invoices.where(status: 'paid').order(created_at: :desc).all.page(params[:invoices_page]).per(5)
-    # sepa_details = Rails.application.config.customization.dig(:payment_methods, :sepa)
-    # @sepa_account = { beneficiary: sepa_details[:billing_account_beneficiary],
-    #                   iban: sepa_details[:billing_account_iban],
-    #                   bic: sepa_details[:billing_account_bic],
-    #                   bank: sepa_details[:billing_account_bank_name] }
+    @transactions = current_user.transactions.order(created_at: :desc)
+                                .all.page(params[:transactions_page]).per(5)
+    @invoices = current_user.invoices.where(status: 'paid').order(created_at: :desc)
+                            .all.page(params[:invoices_page]).per(5)
   end
 
   def create
     amount =  Money.from_amount(params[:amount].to_d, 'EUR').cents
     invoice = Invoice.by_top_up_request(user: current_user, cents: amount)
     if invoice.save
-      invoice.reload
-      @payment_order = PaymentOrder.new_from_invoice(invoice)
+      payment_order = PaymentOrder.new_from_invoice(invoice.reload)
+      payment_order.save! && payment_order.reload
       respond_to do |format|
-        if @payment_order.save && @payment_order.reload
-          format.html { redirect_to @payment_order.linkpay_url }
-          format.json { render :show, status: :created, location: @payment_order }
-        else
-          format.html { redirect_to invoices_path(@payment_order.invoice), notice: t(:error) }
-          format.json { render json: @payment_order.errors, status: :unprocessable_entity }
-        end
+        format.html { redirect_to URI.parse(payment_order.linkpay_url).to_s }
+        format.json { render :show, status: :created, location: payment_order }
       end
     else
       redirect_to(invoices_path, notice: invoice.errors)

@@ -8,12 +8,30 @@ class NotifyIntegrationTest < ActionDispatch::IntegrationTest
     @user = users(:customer)
     sign_in @user
     Money.default_currency = 'EUR'
+    stub_request(:any, /#{API_ENDPOINT}.*/)
+    @critical_cents = Setting.fetch(:billing, :balance_critical_cents) || 500
+    @net_price = Setting.fetch(:billing, :auth_price)
   end
 
-  def test_create_notify
+  def test_create_notify_with_critical_user_balance
+    @user.update(balance_cents: @critical_cents + (@net_price - 2))
     assert_difference -> { Authentication.count } do
       post api_v1_notify_url, params: tara2_smart_id_log
     end
+    mail = ActionMailer::Base.deliveries.last
+    assert_equal(mail.subject, 'Your eeID account balance is running cricitally low')
+  end
+
+  def test_create_notify_with_low_user_balance
+    @user.update(balance_cents: @net_price + 2)
+    assert_difference -> { Authentication.count } do
+      post api_v1_notify_url, params: tara2_smart_id_log
+    end
+    @user.services.each do |s|
+      assert_equal(s.suspended, true)
+    end
+    mail = ActionMailer::Base.deliveries.last
+    assert_equal(mail.subject, 'Your eeiD service(s) have been suspended')
   end
 
   private

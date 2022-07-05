@@ -5,6 +5,7 @@ john:
   identity_code: '12345678'
   user: customer
   main: true
+  default: true
 
 two:
   name: 'Test contact'

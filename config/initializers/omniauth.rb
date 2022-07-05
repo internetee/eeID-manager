@@ -21,6 +21,7 @@ secret = EidManager::Application.config.customization.dig(:tara, :secret)
 redirect_uri = EidManager::Application.config.customization.dig(:tara, :redirect_uri)
 scheme = EidManager::Application.config.customization.dig(:tara, :scheme)
 scope = EidManager::Application.config.customization.dig(:tara, :scope)
+discovery = EidManager::Application.config.customization.dig(:tara, :discovery)
 
 Rails.application.config.middleware.use OmniAuth::Builder do
   provider 'tara', {
@@ -32,7 +33,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     send_scope_to_token_endpoint: false,
     send_nonce: true,
     issuer: issuer,
-    discovery: true,
+    discovery: discovery,
 
     client_options: {
       scheme: scheme,

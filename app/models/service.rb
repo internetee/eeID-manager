@@ -9,6 +9,7 @@ class Service < ApplicationRecord
   after_create :deliver_application_received_mail
   before_save :assign_password
   after_save :suspend_if_out_of_balance
+
   scope :unarchived, -> { where(archived: false) }
 
   def assign_password
@@ -39,7 +40,7 @@ class Service < ApplicationRecord
   end
 
   def unsuspend!
-    raise StandardError if user.out_of_balance
+    raise StandardError.new(message: 'User out of balance') if user.out_of_balance
 
     update_hydra_client
     update(suspended: false)
@@ -76,13 +77,8 @@ class Service < ApplicationRecord
   end
 
   def disapprove!
-    disapprove_hydra_client
     update(client_id: nil, rejected: false, approved: false, suspended: false)
     # TODO: inform customer here
-  end
-
-  def regex_service_password
-    Digest::SHA256.hexdigest(password)
   end
 
   def regex_service_name

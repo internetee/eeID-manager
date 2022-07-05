@@ -23,9 +23,7 @@ class UsersAdminTest < ApplicationSystemTestCase
   end
 
   def test_edit_user_info
-    visit_specific_user_page
-
-    click_link 'Edit details'
+    visit edit_admin_user_path(@user_participant)
     fill_in 'user_surname', with: 'Johnson'
 
     click_on 'Update'
@@ -34,20 +32,30 @@ class UsersAdminTest < ApplicationSystemTestCase
     assert_text 'Johnson'
   end
 
-  # def test_destroy_user
-  # visit_specific_user_page
+  def test_edit_user_info_with_invalid_attributes
+    visit edit_admin_user_path(@user_participant)
+    fill_in 'user_surname', with: '<html>'
 
-  #   click_link 'Delete'
+    click_on 'Update'
 
-  #   accept_alert
-  #   assert_text 'Deleted successfully.'
-  #   assert_no_text @user_participant.given_names
-  # end
+    assert_text 'Please, note, what the only characters allowed is utf-characters'
+    assert_current_path "/admin/users/#{@user_participant.id}"
+  end
+
+  def test_destroy_user
+    visit admin_user_path(@user_participant)
+
+    click_on 'Delete'
+
+    accept_alert
+    assert_text 'Deleted successfully.'
+    assert_no_text @user_participant.given_names
+  end
 
   private
 
   def visit_users_page
-    visit admin_users_path
+    visit admin_users_path({ order: { 'users.surname': 'asc' } })
 
     assert_text 'Users'
     assert page.has_css?('.ui.table.unstackable.fixed')

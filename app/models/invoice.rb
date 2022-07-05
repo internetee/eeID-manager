@@ -1,7 +1,6 @@
 require 'countries'
 
 class Invoice < ApplicationRecord
-
   alias_attribute :country_code, :alpha_two_country_code
   enum status: { issued: 'issued', paid: 'paid', cancelled: 'cancelled' }
   belongs_to :user, optional: true
@@ -75,16 +74,16 @@ class Invoice < ApplicationRecord
   # mark_as_paid_at_with_payment_order(time, payment_order) is the preferred version to use
   # in the application, but this is also used with administrator manually setting invoice as
   # paid in the user interface.
-  def mark_as_paid_at(time)
-    ActiveRecord::Base.transaction do
-      self.paid_at = time
-      self.vat_rate = vat_rate
-      self.paid_amount = total
+  # def mark_as_paid_at(time)
+  #   ActiveRecord::Base.transaction do
+  #     self.paid_at = time
+  #     self.vat_rate = vat_rate
+  #     self.paid_amount = total
 
-      paid!
-      result.mark_as_payment_received(time)
-    end
-  end
+  #     paid!
+  #     result.mark_as_payment_received(time)
+  #   end
+  # end
 
   def mark_as_paid_at_with_payment_order(time, payment_order)
     ActiveRecord::Base.transaction do

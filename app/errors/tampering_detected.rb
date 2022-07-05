@@ -1,3 +1,7 @@
 module Errors
-  class TamperingDetected < ActionController::BadRequest; end
+  class TamperingDetected < StandardError
+    def message
+      I18n.t('auth.tara.tampering')
+    end
+  end
 end

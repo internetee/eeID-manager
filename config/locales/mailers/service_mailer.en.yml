@@ -1,8 +1,8 @@
 en:
   service_mailer:
     service_created:
-      subject: "Application for eID service %{name} received!"
+      subject: "Application for eeID service %{name} received!"
     service_approved:
-      subject: "Your eID service %{name} has been approved!"
+      subject: "Your eeID service %{name} has been approved!"
     service_rejected:
-      subject: "Your eID service %{name} has been rejected!"
+      subject: "Your eeID service %{name} has been rejected!"
