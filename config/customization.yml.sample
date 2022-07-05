@@ -47,6 +47,7 @@ default: &default
       linkpay_prefix: 'https://igw-demo.every-pay.com/lp'
       linkpay_check_prefix: 'https://igw-demo.every-pay.com/api/v4/payments/'
       linkpay_token: '123'
+    
     sepa:
       billing_account_iban: 'EE12 1234 1234 1234'
       billing_account_bank_name: 'AS LHV PANK'
@@ -93,6 +94,8 @@ test:
       key: 'api_key'
       account_id: '123'
       icon: '/images/payment_methods/every_pay.png'
+      linkpay_check_prefix: 'https://igw-demo.every-pay.com/api/v4/payments/'
+
     sepa:
       billing_account_iban: 'EE12 1234 1234 1234'
       billing_account_bank_name: 'AS LHV PANK'
