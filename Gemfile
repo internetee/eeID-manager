@@ -9,6 +9,7 @@ gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'devise'
 gem 'jbuilder', '~> 2.11'
+gem 'jwt'
 gem 'kaminari'
 gem 'lhv', github: 'internetee/lhv', branch: 'master'
 gem 'mimemagic', '~> 0.4.3'
@@ -46,7 +47,7 @@ end
 group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
-  gem 'simplecov', '~> 0.17.1', require: false
+  gem 'simplecov', '0.21.2', require: false
   gem 'webdrivers'
   gem 'webmock'
 end
