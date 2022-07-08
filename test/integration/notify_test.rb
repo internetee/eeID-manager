@@ -13,10 +13,24 @@ class NotifyIntegrationTest < ActionDispatch::IntegrationTest
     @net_price = Setting.fetch(:billing, :auth_price)
   end
 
+  def test_cannot_notify_with_no_auth
+    post api_v1_notify_url, params: tara2_smart_id_log
+
+    assert_response :forbidden
+  end
+
+  def test_cannot_notify_with_wrong_token
+    post api_v1_notify_url, params: tara2_smart_id_log,
+                            headers: { 'Authorization': 'Bearer wrong_token' }
+
+    assert_response :forbidden
+  end
+
   def test_create_notify_with_critical_user_balance
     @user.update(balance_cents: @critical_cents + (@net_price - 2))
     assert_difference -> { Authentication.count } do
-      post api_v1_notify_url, params: tara2_smart_id_log
+      post api_v1_notify_url, params: tara2_smart_id_log,
+                              headers: { 'Authorization': "Bearer #{build_jwt}" }
     end
     mail = ActionMailer::Base.deliveries.last
     assert_equal(mail.subject, 'Your eeID account balance is running cricitally low')
@@ -25,7 +39,8 @@ class NotifyIntegrationTest < ActionDispatch::IntegrationTest
   def test_create_notify_with_low_user_balance
     @user.update(balance_cents: @net_price + 2)
     assert_difference -> { Authentication.count } do
-      post api_v1_notify_url, params: tara2_smart_id_log
+      post api_v1_notify_url, params: tara2_smart_id_log,
+                              headers: { 'Authorization': "Bearer #{build_jwt}" }
     end
     @user.services.each do |s|
       assert_equal(s.suspended, true)
@@ -35,6 +50,14 @@ class NotifyIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   private
+
+  def build_jwt
+    payload = { iss: Rails.configuration.customization['issuer'],
+                name: 'bridge',
+                roles: ['bridge'] }
+
+    JWT.encode payload, Rails.configuration.customization['jwt_secret'], 'HS256'
+  end
 
   # rubocop:disable all
   def tara2_smart_id_log
