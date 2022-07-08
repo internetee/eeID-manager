@@ -40,9 +40,9 @@ module Api
         return false unless token
 
         begin
-          JWT.decode token.gsub('Bearer ', ''), jwt_secret, true, { verify_iss: true,
-                                                                    iss: issuer,
-                                                                    algorithm: 'HS256' }
+          JWT.decode token.gsub('Bearer ', ''), jwt_secret, true, verify_iss: true,
+                                                                  iss: issuer,
+                                                                  algorithm: 'HS256'
           return true
         rescue JWT::DecodeError => e
           Rails.logger.warn "Error decoding the JWT: #{e}"
