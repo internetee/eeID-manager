@@ -1,8 +1,9 @@
 default: &default
-  application_name: "eID Manager"
+  application_name: "eeID Manager"
   time_zone: "Tallinn"
   devise_secret_key: "Your very secret key used for devise tokens"
   jwt_secret: 256-bit-secret-key-here-instead-of-this
+  issuer: 'internet.ee'
 
   # Address from which the emails come from
   email_from_address: "noreply@internet.ee"
@@ -83,6 +84,8 @@ development:
   <<: *default
 test:
   <<: *default
+
+  issuer: 'test.xx'
 
   payment_methods:
     enabled_methods:
