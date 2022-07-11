@@ -12,10 +12,8 @@ class InvoicesController < ApplicationController
   def create
     amount =  Money.from_amount(params[:amount].to_d, 'EUR').cents
     invoice = Invoice.by_top_up_request(user: current_user, cents: amount)
-    if invoice.save
-      invoice.reload
-      payment_order = PaymentOrder.new_from_invoice(invoice)
-      payment_order.save! && payment_order.reload
+    if invoice.save && invoice.reload
+      payment_order = create_payment_order_from_invoice!(invoice)
       if Feature.billing_system_integration_enabled?
         send_invoice_to_billing_system(invoice)
         redirect_url = URI.parse(invoice.payment_link).to_s
@@ -50,6 +48,12 @@ class InvoicesController < ApplicationController
   end
 
   private
+
+  def create_payment_order_from_invoice!(invoice)
+    payment_order = PaymentOrder.new_from_invoice(invoice)
+    payment_order.save!
+    payment_order.reload
+  end
 
   def send_invoice_to_billing_system(invoice)
     add_invoice_instance = EisBilling::Invoice.new(invoice)
