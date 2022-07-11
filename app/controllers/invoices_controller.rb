@@ -11,11 +11,16 @@ class InvoicesController < ApplicationController
   def create
     amount =  Money.from_amount(params[:amount].to_d, 'EUR').cents
     invoice = Invoice.by_top_up_request(user: current_user, cents: amount)
-    if invoice.save
-      payment_order = PaymentOrder.new_from_invoice(invoice.reload)
+    if invoice.save && invoice.reload
+      payment_order = PaymentOrder.new_from_invoice(invoice)
       payment_order.save! && payment_order.reload
       respond_to do |format|
-        format.html { redirect_to URI.parse(payment_order.linkpay_url).to_s }
+        if Feature.billing_system_integration_enabled?
+          send_invoice_to_billing_system(invoice)
+          format.html { redirect_to invoice.payment_link }
+        else
+          format.html { redirect_to URI.parse(payment_order.linkpay_url).to_s }
+        end
         format.json { render :show, status: :created, location: payment_order }
       end
     else
@@ -38,5 +43,15 @@ class InvoicesController < ApplicationController
     raw_pdf = pdf.to_pdf
 
     send_data(raw_pdf, filename: @invoice.filename)
+  end
+
+  private
+
+  def send_invoice_to_billing_system(invoice)
+    add_invoice_instance = EisBilling::Invoice.new(invoice)
+    result = add_invoice_instance.send_invoice
+    link = JSON.parse(result.body)['everypay_link']
+
+    invoice.update(payment_link: link)
   end
 end

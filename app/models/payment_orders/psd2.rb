@@ -40,6 +40,8 @@ module PaymentOrders
     # Skip the check if data was previously requested by us from EveryPay
     # (response['type'] == TRUSTED_DATA) e.g. we know data was originated from trusted source
     def valid_response?
+      return true if Feature.billing_system_integration_enabled?
+
       return false unless response
 
       response['type'] == TRUSTED_DATA
