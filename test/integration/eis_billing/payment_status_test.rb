@@ -11,11 +11,10 @@ class PaymentStatusTest < ActionDispatch::IntegrationTest
 
     sign_in users(:customer)
     Spy.on_instance_method(EisBilling::BaseController, :authorized).and_return(true)
+    Spy.on(Feature, :billing_system_integration_enabled?).and_return(true)
   end
 
   def test_successfully_response_should_update_invoice_status_to_paid
-    return unless Feature.billing_system_integration_enabled?
-
     payload = {
       'order_reference' => @invoice.number,
       'transaction_time' => Time.zone.now - 2.minute,

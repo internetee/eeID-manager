@@ -17,7 +17,7 @@ class InvoicesController < ApplicationController
       respond_to do |format|
         if Feature.billing_system_integration_enabled?
           send_invoice_to_billing_system(invoice)
-          format.html { redirect_to invoice.payment_link }
+          format.html { redirect_to URI.parse(invoice.payment_link).to_s }
         else
           format.html { redirect_to URI.parse(payment_order.linkpay_url).to_s }
         end

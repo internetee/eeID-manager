@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/internetee/directo.git
+  revision: 711ce2d942456ee830b649b03b7141e903a1d86b
+  branch: master
+  specs:
+    directo (1.0.1)
+      money (~> 6.13)
+      nokogiri (~> 1.10)
+
+GIT
   remote: https://github.com/internetee/lhv.git
   revision: e38afe4095e367b41151c0f14e391f6f8dcf6316
   branch: master
@@ -361,6 +370,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
+  directo!
   jbuilder (~> 2.11)
   jwt
   kaminari

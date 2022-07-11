@@ -1,6 +1,6 @@
 require 'countries'
 
-class Invoice < ApplicationRecord
+class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
   alias_attribute :country_code, :alpha_two_country_code
   enum status: { issued: 'issued', paid: 'paid', cancelled: 'cancelled' }
   belongs_to :user, optional: true
@@ -146,8 +146,7 @@ class Invoice < ApplicationRecord
     [{ 'product_id' => 'ETTEM06', 'description' => "Order nr. #{number}",
        'quantity' => 1, 'price' => ActionController::Base.helpers.number_with_precision(
          price.to_s, precision: 2, separator: '.'
-       )
-    }].as_json
+       ) }].as_json
   end
 
   def compose_directo_customer
@@ -158,4 +157,3 @@ class Invoice < ApplicationRecord
     }.as_json
   end
 end
-

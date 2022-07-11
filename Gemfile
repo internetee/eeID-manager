@@ -8,7 +8,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'delayed_job'
 gem 'delayed_job_active_record'
 gem 'devise'
-# gem 'directo', github: 'internetee/directo', branch: 'master'
+gem 'directo', github: 'internetee/directo', branch: 'master'
 gem 'jbuilder', '~> 2.11'
 gem 'jwt'
 gem 'kaminari'

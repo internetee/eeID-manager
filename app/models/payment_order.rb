@@ -60,13 +60,19 @@ class PaymentOrder < ApplicationRecord
   def check_linkpay_status
     return if paid?
 
-    unless Feature.billing_system_integration_enabled?
-      url = "#{LINKPAY_CHECK_PREFIX}#{response['payment_reference']}?api_username=#{USER}"
-      body = basic_auth_get(url: url, username: USER, password: KEY)
-      return unless body
+    check_status unless Feature.billing_system_integration_enabled?
 
-      update(response: body.merge(type: TRUSTED_DATA, timestamp: Time.zone.now))
-    end
     mark_invoice_as_paid
   end
+
+  private
+
+  def check_status
+    url = "#{LINKPAY_CHECK_PREFIX}#{response['payment_reference']}?api_username=#{USER}"
+    body = basic_auth_get(url: url, username: USER, password: KEY)
+    return unless body
+
+    update(response: body.merge(type: TRUSTED_DATA, timestamp: Time.zone.now))
+  end
 end
+
