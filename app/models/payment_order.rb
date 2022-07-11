@@ -75,4 +75,3 @@ class PaymentOrder < ApplicationRecord
     update(response: body.merge(type: TRUSTED_DATA, timestamp: Time.zone.now))
   end
 end
-
