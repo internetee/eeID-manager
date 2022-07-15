@@ -22,6 +22,11 @@ Rails.application.routes.draw do
   match '/profile/toggle_subscription', via: :get, to: 'users#toggle_subscription',
                                         as: :user_toggle_sub
 
+  namespace :eis_billing do
+    put '/payment_status', to: 'payment_status#update', as: 'payment_status'
+    put '/directo_response', to: 'directo_response#update', as: 'directo_response'
+  end
+
   namespace :admin, constraints: Constraints::Administrator.new do
     mount Sidekiq::Web, at: 'sidekiq'
     resources :authentications, only: %i[index show]

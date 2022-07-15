@@ -1,6 +1,6 @@
 require 'countries'
 
-class Invoice < ApplicationRecord
+class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
   alias_attribute :country_code, :alpha_two_country_code
   enum status: { issued: 'issued', paid: 'paid', cancelled: 'cancelled' }
   belongs_to :user, optional: true
@@ -12,9 +12,31 @@ class Invoice < ApplicationRecord
   validates :issue_date, :due_date, presence: true
   validates :paid_at, presence: true, if: proc { |invoice| invoice.paid? }
   validates :cents, numericality: { only_integer: true, greater_than: 0 }
-  before_create :copy_billing_address_from_user
-
+  before_create :copy_billing_address_from_user, :set_invoice_number
+  after_create :create_payment_order!
   scope :overdue, -> { where('due_date < ? AND status = ?', Time.zone.today, statuses[:issued]) }
+
+  def billing_restrictions_issue
+    errors.add(:base, I18n.t('cannot get access'))
+    logger.error('PROBLEM WITH TOKEN')
+    throw(:abort)
+  end
+
+  def billing_out_of_range_issue
+    errors.add(:base, I18n.t('failed_to_generate_invoice_invoice_number_limit_reached'))
+    logger.error('INVOICE NUMBER LIMIT REACHED, COULD NOT GENERATE INVOICE')
+    throw(:abort)
+  end
+
+  def set_invoice_number
+    return unless Feature.billing_system_integration_enabled?
+
+    result = EisBilling::GetInvoiceNumber.send_invoice
+    billing_restrictions_issue if JSON.parse(result.body)['code'] == '403'
+    billing_out_of_range_issue if JSON.parse(result.body)['error'] == 'out of range'
+
+    self.number = JSON.parse(result.body)['invoice_number'].to_i
+  end
 
   def self.by_top_up_request(user:, cents:, psd2: true)
     inv = Invoice.new
@@ -71,6 +93,11 @@ class Invoice < ApplicationRecord
     "#{title.parameterize}.pdf"
   end
 
+  def create_payment_order!
+    payment_order = PaymentOrder.new_from_invoice(self)
+    payment_order.save!
+  end
+
   # mark_as_paid_at_with_payment_order(time, payment_order) is the preferred version to use
   # in the application, but this is also used with administrator manually setting invoice as
   # paid in the user interface.
@@ -96,6 +123,14 @@ class Invoice < ApplicationRecord
     end
   end
 
+  def send_to_billing_system
+    add_invoice_instance = EisBilling::Invoice.new(self)
+    result = add_invoice_instance.send_invoice
+    link = JSON.parse(result.body)['everypay_link']
+
+    update(payment_link: link)
+  end
+
   def overdue?
     due_date < Time.zone.today && issued?
   end
@@ -105,7 +140,33 @@ class Invoice < ApplicationRecord
     user.balance_cents = balance + Money.new(total, 'EUR').cents
     return unless user.update(balance_cents: balance + Money.new(total, 'EUR').cents)
 
-    BillingMailer.account_credited(user, self).deliver_later
     user.unsuspend_services!
+    BillingMailer.account_credited(user, self).deliver_later
+  end
+
+  def as_directo_json
+    invoice = ActiveSupport::JSON.decode(ActiveSupport::JSON.encode(self))
+    invoice['customer'] = compose_directo_customer
+    invoice['issue_date'] = issue_date.strftime('%Y-%m-%d')
+    invoice['transaction_date'] = paid_at&.strftime('%Y-%m-%d')
+    invoice['language'] = user.locale
+    invoice['invoice_lines'] = compose_directo_product
+
+    invoice
+  end
+
+  def compose_directo_product
+    [{ 'product_id' => 'ETTEM06', 'description' => "Order nr. #{number}",
+       'quantity' => 1, 'price' => ActionController::Base.helpers.number_with_precision(
+         price.to_s, precision: 2, separator: '.'
+       ) }].as_json
+  end
+
+  def compose_directo_customer
+    {
+      'code' => '',
+      'destination' => user.billing_alpha_two_country_code,
+      'vat_reg_no' => user.billing_vat_code,
+    }.as_json
   end
 end

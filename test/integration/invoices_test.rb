@@ -25,11 +25,27 @@ class InvoicesIntegrationTest < ActionDispatch::IntegrationTest
     assert_redirected_to invoices_url
   end
 
-  def test_create_invoice
-    post invoices_url(user: @user, amount: 200)
-    last_payment_order = PaymentOrder.last
+  def test_create_invoice_without_billing_system
+    Feature.stub(:billing_system_integration_enabled?, false) do
+      post invoices_url(user: @user, amount: 200)
 
-    assert_redirected_to last_payment_order.linkpay_url
+      last_payment_order = PaymentOrder.last
+      assert_redirected_to last_payment_order.linkpay_url
+    end
+  end
+
+  def test_create_invoice_with_billing_system
+    Feature.stub(:billing_system_integration_enabled?, true) do
+      invoice_n = Invoice.order(number: :desc).last.number
+      stub_request(:post, 'https://eis_billing_system:3000/api/v1/invoice_generator/invoice_number_generator')
+        .to_return(status: 200, body: "{\"invoice_number\":\"#{invoice_n + 3}\"}")
+      stub_request(:post, 'https://eis_billing_system:3000/api/v1/invoice_generator/invoice_generator')
+        .to_return(status: 200, body: "{\"everypay_link\":\"http://link.test\"}", headers: {})
+      post invoices_url(user: @user, amount: 200)
+
+      invoice = Invoice.last
+      assert_redirected_to invoice.payment_link
+    end
   end
 
   def test_show_current_invoice

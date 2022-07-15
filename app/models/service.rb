@@ -36,14 +36,14 @@ class Service < ApplicationRecord
 
     suspend_hydra_client(no_credit)
     # TODO: inform user about suspension
-    update(suspended: true)
+    update(suspended: true, no_credit: no_credit)
   end
 
   def unsuspend!
     raise StandardError.new(message: 'User out of balance') if user.out_of_balance
 
     update_hydra_client
-    update(suspended: false)
+    update(suspended: false, no_credit: false)
   end
 
   def suspend_if_out_of_balance

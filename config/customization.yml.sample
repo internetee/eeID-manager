@@ -36,6 +36,11 @@ default: &default
     autotopup_min_cents: 500 # Minimal amount for PSD2 / CC payments
     balance_critical_cents: 500
 
+  billing_system_integration:
+    enabled: false
+    eis_billing_system_base_url: 'http://eis_billing_system:3000'
+    billing_secret: ''
+
   payment_methods:
     enabled_methods:
       - "PaymentOrders::Psd2"

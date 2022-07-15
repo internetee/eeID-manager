@@ -15,16 +15,18 @@ class LinkpayIntegrationTest < ActionDispatch::IntegrationTest
     @url = "#{LINKPAY_CHECK_PREFIX}#{callback_params['payment_reference']}?api_username=#{USER}"
   end
 
-  def test_callback
-    stub_request(:get, @url).to_return(status: 200, body: every_pay_payment_outcome_response)
-    get linkpay_callback_path(params: callback_params)
-    perform_enqueued_jobs
+  def test_callback_without_billing_system
+    Feature.stub(:billing_system_integration_enabled?, false) do
+      stub_request(:get, @url).to_return(status: 200, body: every_pay_payment_outcome_response)
+      get linkpay_callback_path(params: callback_params)
+      perform_enqueued_jobs
 
-    @payment_order.reload
-    assert_equal(@payment_order.response['payment_reference'], callback_params['payment_reference'])
-    assert_equal(@payment_order.response['type'], 'trusted_data')
-    assert @payment_order.paid?
-    assert @invoice.reload.paid?
+      @payment_order.reload
+      assert_equal(@payment_order.response['payment_reference'], callback_params['payment_reference'])
+      assert_equal(@payment_order.response['type'], 'trusted_data')
+      assert @payment_order.paid?
+      assert @invoice.reload.paid?
+    end
   end
 
   def test_callback_with_standard_error

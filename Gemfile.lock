@@ -1,4 +1,13 @@
 GIT
+  remote: https://github.com/internetee/directo.git
+  revision: 711ce2d942456ee830b649b03b7141e903a1d86b
+  branch: master
+  specs:
+    directo (1.0.1)
+      money (~> 6.13)
+      nokogiri (~> 1.10)
+
+GIT
   remote: https://github.com/internetee/lhv.git
   revision: e38afe4095e367b41151c0f14e391f6f8dcf6316
   branch: master
@@ -298,6 +307,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
+    spy (1.0.2)
     swd (1.3.0)
       activesupport (>= 3)
       attr_required (>= 0.0.5)
@@ -360,6 +370,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   devise
+  directo!
   jbuilder (~> 2.11)
   jwt
   kaminari
@@ -384,6 +395,7 @@ DEPENDENCIES
   sidekiq (~> 6.2)
   simplecov (= 0.21.2)
   sprockets (~> 4.0)
+  spy
   turbolinks (~> 5)
   web-console (>= 3.3.0)
   webdrivers
