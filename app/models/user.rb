@@ -50,7 +50,8 @@ class User < ApplicationRecord
   end
 
   def unsuspend_services!
-    services.where(approved: true, suspended: true).each(&:unsuspend!)
+    services.unarchived.where(approved: true, suspended: true, no_credit: true)
+            .each(&:unsuspend!)
   end
 
   def vat_rate

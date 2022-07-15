@@ -13,7 +13,7 @@ class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
   validates :paid_at, presence: true, if: proc { |invoice| invoice.paid? }
   validates :cents, numericality: { only_integer: true, greater_than: 0 }
   before_create :copy_billing_address_from_user, :set_invoice_number
-
+  after_create :create_payment_order!
   scope :overdue, -> { where('due_date < ? AND status = ?', Time.zone.today, statuses[:issued]) }
 
   def billing_restrictions_issue
@@ -93,6 +93,11 @@ class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
     "#{title.parameterize}.pdf"
   end
 
+  def create_payment_order!
+    payment_order = PaymentOrder.new_from_invoice(self)
+    payment_order.save!
+  end
+
   # mark_as_paid_at_with_payment_order(time, payment_order) is the preferred version to use
   # in the application, but this is also used with administrator manually setting invoice as
   # paid in the user interface.
@@ -118,6 +123,14 @@ class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
     end
   end
 
+  def send_to_billing_system
+    add_invoice_instance = EisBilling::Invoice.new(self)
+    result = add_invoice_instance.send_invoice
+    link = JSON.parse(result.body)['everypay_link']
+
+    update(payment_link: link)
+  end
+
   def overdue?
     due_date < Time.zone.today && issued?
   end
@@ -127,8 +140,8 @@ class Invoice < ApplicationRecord # rubocop:disable Metrics/ClassLength
     user.balance_cents = balance + Money.new(total, 'EUR').cents
     return unless user.update(balance_cents: balance + Money.new(total, 'EUR').cents)
 
-    BillingMailer.account_credited(user, self).deliver_later
     user.unsuspend_services!
+    BillingMailer.account_credited(user, self).deliver_later
   end
 
   def as_directo_json

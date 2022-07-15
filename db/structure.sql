@@ -1155,7 +1155,8 @@ CREATE TABLE public.services (
     interrupt_email character varying,
     contact_id bigint,
     approved boolean DEFAULT false,
-    suspended boolean DEFAULT false
+    suspended boolean DEFAULT false,
+    no_credit boolean DEFAULT false
 );
 
 
@@ -2016,6 +2017,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20220214110646'),
 ('20220214143035'),
 ('20220711071642'),
-('20220711071734');
+('20220711071734'),
+('20220715073454');
 
 

@@ -12,17 +12,16 @@ class InvoicesController < ApplicationController
 
   # rubocop:disable Metrics/MethodLength
   def create
-    if @invoice.save && @invoice.reload
-      payment_order = create_payment_order_from_invoice!(@invoice)
+    if @invoice.save
       if Feature.billing_system_integration_enabled?
-        send_invoice_to_billing_system(@invoice)
-        redirect_url = URI.parse(@invoice.payment_link).to_s
+        @invoice.send_to_billing_system
+        url = @invoice.reload.payment_link
       else
-        redirect_url = URI.parse(payment_order.linkpay_url).to_s
+        url = @invoice.payment_orders.last.linkpay_url
       end
       respond_to do |format|
-        format.html { redirect_to redirect_url }
-        format.json { render :show, status: :created, location: payment_order }
+        format.html { redirect_to URI.parse(url).to_s }
+        format.json { render :show, status: :created, location: @invoice }
       end
     else
       redirect_to(invoices_path, notice: @invoice.errors)
@@ -52,19 +51,5 @@ class InvoicesController < ApplicationController
   def set_invoice
     amount = Money.from_amount(params[:amount].to_d, 'EUR').cents
     @invoice = Invoice.by_top_up_request(user: current_user, cents: amount)
-  end
-
-  def create_payment_order_from_invoice!(invoice)
-    payment_order = PaymentOrder.new_from_invoice(invoice)
-    payment_order.save!
-    payment_order.reload
-  end
-
-  def send_invoice_to_billing_system(invoice)
-    add_invoice_instance = EisBilling::Invoice.new(invoice)
-    result = add_invoice_instance.send_invoice
-    link = JSON.parse(result.body)['everypay_link']
-
-    invoice.update(payment_link: link)
   end
 end
