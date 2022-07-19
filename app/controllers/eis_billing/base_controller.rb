@@ -38,6 +38,10 @@ module EisBilling
       render json: { message: 'Access denied' }, status: :unauthorized unless logged_in?
     end
 
+    def billing_secret_key
+      EidManager::Application.config.customization[:billing_system_integration]&.compact&.fetch(:billing_secret, '')
+    end
+
     def logger
       @logger ||= Rails.logger
     end
@@ -46,11 +50,6 @@ module EisBilling
       return true if Feature.billing_system_integration_enabled?
 
       render json: { message: "We don't work yet!" }, status: :unauthorized
-    end
-
-    def billing_secret_key
-      EidManager::Application.config.customization[:billing_system_integration]
-                                    &.compact&.fetch(:billing_secret, '')
     end
   end
 end
