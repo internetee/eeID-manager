@@ -31,7 +31,7 @@ module EisBilling
     end
 
     def logged_in?
-      !!accessable_service
+      accessable_service
     end
 
     def authorized

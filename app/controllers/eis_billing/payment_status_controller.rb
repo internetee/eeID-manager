@@ -6,10 +6,8 @@ module EisBilling
       return unless invoice
 
       payment_order = PaymentOrder.find_by(invoice_id: invoice.id)
-
       payment_order.response = params
       payment_order.save
-
       payment_order.check_linkpay_status
 
       respond_to do |format|

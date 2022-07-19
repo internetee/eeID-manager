@@ -16,7 +16,8 @@ class LinkpayController < ApplicationController
     }
     payment_order.save
     CheckLinkpayStatusJob.set(wait: 1.minute).perform_later(payment_order.id)
-    # CheckLinkpayStatusJob.perform_now(payment_order.id) # using for test dev envinronment. Remove after deploying production
+    # using for test dev envinronment. Remove after deploying production
+    # CheckLinkpayStatusJob.perform_now(payment_order.id)
   end
 
   private
